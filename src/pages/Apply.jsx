@@ -1,5 +1,6 @@
 import { DatabaseIcon } from "lucide-react";
-import React, { useMemo, useState, useEffect } from "react";
+import Breadcrum from "../layouts/Breadcrum";
+import { useMemo, useState, useEffect } from "react";
 
 const STEPS = ["Personal", "More User Info", "Education", "Family Members", "Documents", "Review & Submit"];
 
@@ -465,430 +466,433 @@ export default function ChinaAdmissionForm() {
 
 
     return (
-        <div className="min-h-screen bg-gray-50 py-10">
-            <div className="mx-auto max-w-6xl px-4">
-                <div className="mb-8 text-center"><h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admission Application – Study in China</h1><p className="text-gray-600 mt-2">Complete the steps below. Your progress is saved locally in your browser.</p></div>
-                <div className="bg-white rounded-2xl shadow-sm border p-6 md:p-8">
-                    <StepIndicator currentStep={step} />
-                    <ErrorBanner errors={errors} />
-                    <form onSubmit={onSubmit} className="space-y-6">
-                        {step === 0 && (
-                            <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <TextField required label="Major First Choice" name="majorFirstChoice" value={data.majorFirstChoice} onChange={update} />
-                                <TextField label="Major Second Choice" name="majorSecondChoice" value={data.majorSecondChoice} onChange={update} />
-                                <TextField required label="Surname" name="surName" value={data.surName} onChange={update} />
-                                <TextField required label="First Name" name="firstName" value={data.firstName} onChange={update} />
-                                <TextField required label="Middle Name" name="middleName" value={data.middleName} onChange={update} />
-                                <TextField required label="Email" name="email" type="email" value={data.email} onChange={update} />
-                                <TextField required label="Phone" name="phone" value={data.phone} onChange={update} placeholder="+234 800 000 0000" />
-                                <TextField required label="Nationality" name="nationality" value={data.nationality} onChange={update} />
-                                <TextField required label="Date of Birth" name="dob" type="date" value={data.dob} onChange={update} />
-                                <TextField required label="Nationality" name="nationality" value={data.nationality} onChange={update} />
-                                <TextField label="Chinese Name" name="chineseName" value={data.chineseName} onChange={update} />
-                                <TextField required label="Native Language" name="nativeLanguage" value={data.nativeLanguage} onChange={update} />
-                                <TextField required label="Passport Number" name="passportNumber" value={data.passportNumber} onChange={update} />
-                                <TextField required label="Passport Expiry Date" name="passportExpiryDate" type="date" value={data.passportExpiryDate} onChange={update} />
-                                <TextField required label="Marital Status" name="maritalStatus" value={data.maritalStatus} onChange={update} />
-                                <TextField required label="Religion" name="religion" value={data.religion} onChange={update} />
-                                <TextField required label="Place Of Birth" name="placeOfBirth" value={data.placeOfBirth} onChange={update} />
-                                <TextField required label="Permanent Home Address" name="permanentHomeAddress" value={data.permanentHomeAddress} onChange={update} />
-                                <TextField label="Fax" name="fax" value={data.fax} onChange={update} />
-                                <TextField label="Zip Code" name="zipCode" value={data.zipCode} onChange={update} />
-                                <RadioGroup required label="Gender" name="gender" value={data.gender} onChange={update} options={["Male", "Female", "Other"]} />
-                            </section>
-                        )}
-                        {step === 1 && (
-                            <div>
+        <div>
+            <Breadcrum heading={`Application Form`} page_title={`Application form`} />
+            <div className="min-h-screen bg-gray-50 py-10">
+                <div className="mx-auto max-w-6xl px-4">
+                    <div className="mb-8 text-center"><h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admission Application – Study in China</h1><p className="text-gray-600 mt-2">Complete the steps below. Your progress is saved locally in your browser.</p></div>
+                    <div className="bg-white rounded-2xl shadow-sm border p-6 md:p-8">
+                        <StepIndicator currentStep={step} />
+                        <ErrorBanner errors={errors} />
+                        <form onSubmit={onSubmit} className="space-y-6">
+                            {step === 0 && (
                                 <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <SelectField required label="Rate Your Chinese" name="rateYourChinese" value={data.rateYourChinese} onChange={update} options={["Good", "Average", "Better", "Very Good", "None"]} />
-
-                                    <SelectField required label="Rate Your English" name="rateYourEnglish" value={data.rateYourEnglish} onChange={update} options={["Good", "Average", "Better", "Very Good", "None"]} />
-
-                                    <SelectField required label="Study Category" name="studyCategory" value={data.studyCategory} onChange={update} options={["Undergraduate", "Master", "PHD"]} />
-
-                                    <TextField required label="Field of Study" name="fieldOfStudy" value={data.fieldOfStudy} onChange={update} placeholder="e.g. Medicine" />
+                                    <TextField required label="Major First Choice" name="majorFirstChoice" value={data.majorFirstChoice} onChange={update} />
+                                    <TextField label="Major Second Choice" name="majorSecondChoice" value={data.majorSecondChoice} onChange={update} />
+                                    <TextField required label="Surname" name="surName" value={data.surName} onChange={update} />
+                                    <TextField required label="First Name" name="firstName" value={data.firstName} onChange={update} />
+                                    <TextField required label="Middle Name" name="middleName" value={data.middleName} onChange={update} />
+                                    <TextField required label="Email" name="email" type="email" value={data.email} onChange={update} />
+                                    <TextField required label="Phone" name="phone" value={data.phone} onChange={update} placeholder="+234 800 000 0000" />
+                                    <TextField required label="Nationality" name="nationality" value={data.nationality} onChange={update} />
+                                    <TextField required label="Date of Birth" name="dob" type="date" value={data.dob} onChange={update} />
+                                    <TextField required label="Nationality" name="nationality" value={data.nationality} onChange={update} />
+                                    <TextField label="Chinese Name" name="chineseName" value={data.chineseName} onChange={update} />
+                                    <TextField required label="Native Language" name="nativeLanguage" value={data.nativeLanguage} onChange={update} />
+                                    <TextField required label="Passport Number" name="passportNumber" value={data.passportNumber} onChange={update} />
+                                    <TextField required label="Passport Expiry Date" name="passportExpiryDate" type="date" value={data.passportExpiryDate} onChange={update} />
+                                    <TextField required label="Marital Status" name="maritalStatus" value={data.maritalStatus} onChange={update} />
+                                    <TextField required label="Religion" name="religion" value={data.religion} onChange={update} />
+                                    <TextField required label="Place Of Birth" name="placeOfBirth" value={data.placeOfBirth} onChange={update} />
+                                    <TextField required label="Permanent Home Address" name="permanentHomeAddress" value={data.permanentHomeAddress} onChange={update} />
+                                    <TextField label="Fax" name="fax" value={data.fax} onChange={update} />
+                                    <TextField label="Zip Code" name="zipCode" value={data.zipCode} onChange={update} />
+                                    <RadioGroup required label="Gender" name="gender" value={data.gender} onChange={update} options={["Male", "Female", "Other"]} />
                                 </section>
-                                <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Duration of Study</p>
-                                <div className="grid md:grid-cols-2 gap-2">
-                                    <TextField
-                                        type="date"
-                                        label="Duration Of Study From"
-                                        required
-                                        name="durationOfStudyFrom"
-                                        value={data.durationOfStudyFrom}
-                                        onChange={update}
-                                    />
-                                    <TextField
-                                        type="date"
-                                        label="Duration Of Study To"
-                                        required
-                                        name="durationOfStudyTo"
-                                        value={data.durationOfStudyTo}
-                                        onChange={update}
-                                    />
+                            )}
+                            {step === 1 && (
+                                <div>
+                                    <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <SelectField required label="Rate Your Chinese" name="rateYourChinese" value={data.rateYourChinese} onChange={update} options={["Good", "Average", "Better", "Very Good", "None"]} />
+
+                                        <SelectField required label="Rate Your English" name="rateYourEnglish" value={data.rateYourEnglish} onChange={update} options={["Good", "Average", "Better", "Very Good", "None"]} />
+
+                                        <SelectField required label="Study Category" name="studyCategory" value={data.studyCategory} onChange={update} options={["Undergraduate", "Master", "PHD"]} />
+
+                                        <TextField required label="Field of Study" name="fieldOfStudy" value={data.fieldOfStudy} onChange={update} placeholder="e.g. Medicine" />
+                                    </section>
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Duration of Study</p>
+                                    <div className="grid md:grid-cols-2 gap-2">
+                                        <TextField
+                                            type="date"
+                                            label="Duration Of Study From"
+                                            required
+                                            name="durationOfStudyFrom"
+                                            value={data.durationOfStudyFrom}
+                                            onChange={update}
+                                        />
+                                        <TextField
+                                            type="date"
+                                            label="Duration Of Study To"
+                                            required
+                                            name="durationOfStudyTo"
+                                            value={data.durationOfStudyTo}
+                                            onChange={update}
+                                        />
+                                    </div>
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Work Experience</p>
+                                    <div className="grid md:grid-cols-2 gap-2">
+                                        <TextField
+                                            label="Employee"
+                                            required
+                                            name="employer"
+                                            value={data.employer}
+                                            onChange={update}
+                                        />
+                                        <TextField
+                                            label="Location"
+                                            required
+                                            name="location"
+                                            value={data.location}
+                                            onChange={update}
+                                        />
+                                        <TextField
+                                            label="Position"
+                                            required
+                                            name="position"
+                                            value={data.position}
+                                            onChange={update}
+                                        />
+                                        <TextField
+                                            type="date"
+                                            label="Date Started"
+                                            required
+                                            name="dateStarted"
+                                            value={data.dateStarted}
+                                            onChange={update}
+                                        />
+                                    </div>
+
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Financial Sponsors</p>
+                                    <div className="grid md:grid-cols-2 gap-2">
+                                        <TextField
+                                            label="Financial Sponsor Name"
+                                            required
+                                            name="financialSponsorName"
+                                            value={data.financialSponsorName}
+                                            onChange={update}
+                                        />
+                                        <TextField
+                                            label="Address"
+                                            required
+                                            name="address"
+                                            value={data.address}
+                                            onChange={update}
+                                        />
+                                        <TextField
+                                            label="Relationship With Applicant"
+                                            required
+                                            name="relationshipWithApplicant"
+                                            value={data.relationshipWithApplicant}
+                                            onChange={update}
+                                        />
+                                        <TextField
+                                            label="Mobile Number"
+                                            required
+                                            name="mobileNumber"
+                                            value={data.mobileNumber}
+                                            onChange={update}
+                                        />
+                                    </div>
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Person or Agency to Action on your behalf in China</p>
+                                    <div className="grid md:grid-cols-1 gap-2">
+                                        <TextField
+                                            label="Enter Agent"
+                                            required
+                                            name="agent"
+                                            value={data.agent}
+                                            onChange={update}
+                                        />
+                                    </div>
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Comment of Sponsor or Recommended Party</p>
+                                    <div className="grid md:grid-cols-1 gap-2">
+
+                                        <TextArea label="Enter Comment"
+                                            required
+                                            name="sponsorComment"
+                                            value={data.sponsorComment}
+                                            placeholder={`Enter Comment Here`}
+                                            onChange={update}
+                                        />
+                                        <TextField
+                                            label="Enter Date"
+                                            type="date"
+                                            required
+                                            name="signedDate"
+                                            value={data.signedDate}
+                                            onChange={update}
+                                        />
+
+                                    </div>
                                 </div>
-                                <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Work Experience</p>
-                                <div className="grid md:grid-cols-2 gap-2">
-                                    <TextField
-                                        label="Employee"
-                                        required
-                                        name="employer"
-                                        value={data.employer}
-                                        onChange={update}
-                                    />
-                                    <TextField
-                                        label="Location"
-                                        required
-                                        name="location"
-                                        value={data.location}
-                                        onChange={update}
-                                    />
-                                    <TextField
-                                        label="Position"
-                                        required
-                                        name="position"
-                                        value={data.position}
-                                        onChange={update}
-                                    />
-                                    <TextField
-                                        type="date"
-                                        label="Date Started"
-                                        required
-                                        name="dateStarted"
-                                        value={data.dateStarted}
-                                        onChange={update}
-                                    />
-                                </div>
+                            )}
+                            {step === 2 && (
+                                <section className="space-y-6">
+                                    <div className="space-y-4">
+                                        <h3 className="text-md font-semibold">Education Background</h3>
+                                        {Array.isArray(data.educationHistory) && data.educationHistory.map((edu, idx) => (
+                                            <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-xl p-3">
 
-                                <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Financial Sponsors</p>
-                                <div className="grid md:grid-cols-2 gap-2">
-                                    <TextField
-                                        label="Financial Sponsor Name"
-                                        required
-                                        name="financialSponsorName"
-                                        value={data.financialSponsorName}
-                                        onChange={update}
-                                    />
-                                    <TextField
-                                        label="Address"
-                                        required
-                                        name="address"
-                                        value={data.address}
-                                        onChange={update}
-                                    />
-                                    <TextField
-                                        label="Relationship With Applicant"
-                                        required
-                                        name="relationshipWithApplicant"
-                                        value={data.relationshipWithApplicant}
-                                        onChange={update}
-                                    />
-                                    <TextField
-                                        label="Mobile Number"
-                                        required
-                                        name="mobileNumber"
-                                        value={data.mobileNumber}
-                                        onChange={update}
-                                    />
-                                </div>
-                                <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Person or Agency to Action on your behalf in China</p>
-                                <div className="grid md:grid-cols-1 gap-2">
-                                    <TextField
-                                        label="Enter Agent"
-                                        required
-                                        name="agent"
-                                        value={data.agent}
-                                        onChange={update}
-                                    />
-                                </div>
-                                <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Comment of Sponsor or Recommended Party</p>
-                                <div className="grid md:grid-cols-1 gap-2">
+                                                <TextField label="School Attended" name={`schoolAttended-${idx}`} value={edu.schoolAttended} onChange={(n, v) => updateEducation(idx, "schoolAttended", v)} />
 
-                                    <TextArea label="Enter Comment"
-                                        required
-                                        name="sponsorComment"
-                                        value={data.sponsorComment}
-                                        placeholder={`Enter Comment Here`}
-                                        onChange={update}
-                                    />
-                                    <TextField
-                                        label="Enter Date"
-                                        type="date"
-                                        required
-                                        name="signedDate"
-                                        value={data.signedDate}
-                                        onChange={update}
-                                    />
+                                                <TextField label="Location" name={`location-${idx}`} value={edu.location} onChange={(n, v) => updateEducation(idx, "location", v)} />
 
-                                </div>
-                            </div>
-                        )}
-                        {step === 2 && (
-                            <section className="space-y-6">
-                                <div className="space-y-4">
-                                    <h3 className="text-md font-semibold">Education Background</h3>
-                                    {Array.isArray(data.educationHistory) && data.educationHistory.map((edu, idx) => (
-                                        <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-xl p-3">
+                                                <TextField label="Major" name={`major-${idx}`} value={edu.major} onChange={(n, v) => updateEducation(idx, "major", v)} />
 
-                                            <TextField label="School Attended" name={`schoolAttended-${idx}`} value={edu.schoolAttended} onChange={(n, v) => updateEducation(idx, "schoolAttended", v)} />
+                                                <TextField label="email" name={`attended-${idx}`} type="date" value={edu.dateAttended} onChange={(n, v) => updateEducation(idx, "dateAttended", v)} />
 
-                                            <TextField label="Location" name={`location-${idx}`} value={edu.location} onChange={(n, v) => updateEducation(idx, "location", v)} />
+                                                <TextField label="Degree Awarded" name={`degreeAwarded-${idx}`} type="text" value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} />
 
-                                            <TextField label="Major" name={`major-${idx}`} value={edu.major} onChange={(n, v) => updateEducation(idx, "major", v)} />
-
-                                            <TextField label="email" name={`attended-${idx}`} type="date" value={edu.dateAttended} onChange={(n, v) => updateEducation(idx, "dateAttended", v)} />
-
-                                            <TextField label="Degree Awarded" name={`degreeAwarded-${idx}`} type="text" value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} />
-
-                                            <div className="md:col-span-2 flex items-center gap-3">
-                                                {data.educationHistory.length > 1 && (
-                                                    <button type="button" onClick={() => removeEducation(idx)} className="rounded-2xl border px-3 py-2 text-sm">Remove</button>
-                                                )}
-                                                {idx === data.educationHistory.length - 1 && (
-                                                    <button type="button" onClick={addEducation} className="rounded-2xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Add another</button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
-                        )}
-                        {step === 3 && (
-                            <section className="space-y-6">
-                                <div className="space-y-4">
-                                    <h3 className="text-md font-semibold">Family Members</h3>
-                                    {Array.isArray(data.familyMembers) && data.familyMembers.map((fam, idx) => (
-                                        <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-xl p-3">
-
-                                            <TextField label="Family Member Name" name={`familyMemberName-${idx}`} value={fam.familyMemberName} onChange={(n, v) => updateFamily(idx, "familyMemberName", v)} />
-
-                                            <TextField label="Nationality" name={`nationality-${idx}`} value={fam.nationality} onChange={(n, v) => updateFamily(idx, "nationality", v)} />
-
-                                            <TextField label="Mobile Number" name={`mobileNumber-${idx}`} value={fam.mobileNumber} onChange={(n, v) => updateFamily(idx, "mobileNumber", v)} />
-
-                                            <TextField label="Email" name={`email-${idx}`} type="email" value={fam.email} onChange={(n, v) => updateFamily(idx, "email", v)} />
-
-                                            <TextField label="Profession" name={`profession-${idx}`} type="text" value={fam.profession} onChange={(n, v) => updateFamily(idx, "profession", v)} />
-
-                                            <TextField label="Work Place" name={`workPlace-${idx}`} type="text" value={fam.workPlace} onChange={(n, v) => updateFamily(idx, "workPlace", v)} />
-
-                                            <TextField label="Relationship" name={`relationship-${idx}`} type="text" value={fam.relationship} onChange={(n, v) => updateFamily(idx, "relationship", v)} />
-
-                                            <div className="md:col-span-2 flex items-center gap-3">
-                                                {data.familyMembers.length > 1 && (
-                                                    <button type="button" onClick={() => removeFamilyMember(idx)} className="rounded-2xl border px-3 py-2 text-sm">Remove</button>
-                                                )}
-                                                {idx === data.familyMembers.length - 1 && (
-                                                    <button type="button" onClick={addFamilyMember} className="rounded-2xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Add another</button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
-                        )}
-                        {step === 4 && (
-                            <section className="space-y-6">
-                                <FileField required label="International Passport Photo (recent)" name="passportphoto" files={data.passportphoto} onFilesChange={updateFiles} accept="image/*" multiple={false} />
-
-                                <FileField required label="Applicant Signature (Sign on paper and snap)" name="applicantSignature" files={data.applicantSignature} onFilesChange={updateFiles} accept="image/*" multiple={false} />
-
-                                <FileField required label="Sponsor's Signature (Sign on paper and snap)" name="sponsorSignature" files={data.sponsorSignature} onFilesChange={updateFiles} accept="image/*" multiple={false} />
-
-                                <FileField label="Academic Transcripts" required name="transcripts" files={data.transcripts} onFilesChange={updateFiles} accept="image/*,application/pdf" multiple />
-
-                                <FileField required label="Recommendation Letters" name="recommendationLetters" files={data.recommendationLetters} onFilesChange={updateFiles} accept="image/*,application/pdf" multiple />
-
-                                <FileField required label="Medical Report (pdf format)" name="medicalReport" files={data.medicalReport} onFilesChange={updateFiles} accept="application/pdf" multiple />
-
-                                <FileField required label="Bachelor/Masters Certificate (pdf format)" name="certificates" files={data.certificates} onFilesChange={updateFiles} accept="application/pdf" multiple />
-
-                                <FileField required label="Bank Statement (pdf format)" name="bankStatement" files={data.bankStatement} onFilesChange={updateFiles} accept="application/pdf" multiple />
-
-                                <FileField required label="Non-Criminal Record (pdf format)" name="nonCriminalRecord" files={data.nonCriminalRecord} onFilesChange={updateFiles} accept="application/pdf" multiple />
-
-                                <FileField required label="English Language Proficiency Certificate (Non-English Speaking Countries)" name="englishCertificate" files={data.englishCertificate} onFilesChange={updateFiles} accept="application/pdf" multiple />
-
-                                <FileField label="Research Proposal (doc format)"
-                                    accept=".pdf, .doc, .docx" name="researchProposal" files={data.researchProposal} onFilesChange={updateFiles} multiple />
-                            </section>
-                        )}
-                        {step === 5 && (
-                            <section className="space-y-4">
-                                <h2 className="text-lg font-semibold">Review your details</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <ReviewItem label="Major First Choice" value={`${data.majorFirstChoice}`} />
-                                    <ReviewItem label="Major Second Choice" value={data.majorSecondChoice} />
-                                    <ReviewItem label="Surname" value={data.surName} />
-                                    <ReviewItem label="Firstname" value={data.firstName} />
-                                    <ReviewItem label="Middlename" value={data.middleName} />
-                                    <ReviewItem label="Email" value={data.email} />
-                                    <ReviewItem label="Phone" value={data.phone} />
-                                    <ReviewItem label="Gender" value={data.gender} />
-                                    <ReviewItem label="Date of Birth" value={data.dob} />
-                                    <ReviewItem label="Nationality" value={data.nationality} />
-                                    <ReviewItem label="Chinese Name" value={data.chineseName} />
-                                    <ReviewItem label="Native Language" value={data.nativeLanguage} />
-                                    <ReviewItem label="Passport Number" value={data.passportNumber} />
-                                    <ReviewItem label="Passport Expiry Date" value={data.passportExpiryDate} />
-                                    <ReviewItem label="Religion" value={data.religion} />
-                                    <ReviewItem label="MaritalStatus" value={data.maritalStatus} />
-                                    <ReviewItem label="Place Of Birth" value={data.placeOfBirth} />
-                                    <ReviewItem label="Permanent Home Address" value={data.permanentHomeAddress} />
-                                    <ReviewItem label="Fax" value={data.fax} />
-                                    <ReviewItem label="Zip Code" value={data.zipCode} />
-                                </div>
-                                <h3 className="text-md font-semibold mt-8 mb-2">More Applicant Info</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <ReviewItem label="Rate Your Chinese" value={data.rateYourChinese} />
-                                    <ReviewItem label="Rate Your English" value={data.rateYourEnglish} />
-                                    <ReviewItem label="Field Of Study" value={data.fieldOfStudy} />
-                                    <ReviewItem label="Study Category" value={data.studyCategory} />
-                                    <ReviewItem label="Duration Of Study From" value={data.durationOfStudyFrom} />
-                                    <ReviewItem label="Duration Of Study To" value={data.durationOfStudyTo} />
-                                    <ReviewItem label="Employer" value={data.employer} />
-                                    <ReviewItem label="Location" value={data.location} />
-                                    <ReviewItem label="Position" value={data.position} />
-                                    <ReviewItem label="Date Started" value={data.dateStarted} />
-                                    <ReviewItem label="Financial Sponsor Name" value={data.financialSponsorName} />
-                                    <ReviewItem label="Address" value={data.address} />
-                                    <ReviewItem label="Relationship With Applicant" value={data.relationshipWithApplicant} />
-                                    <ReviewItem label="MobileNumber" value={data.mobileNumber} />
-                                    <ReviewItem label="Agent" value={data.agent} />
-                                    <ReviewItem label="Sponsor's Comment" value={data.sponsorComment} />
-                                    <ReviewItem label="Signed Date" value={data.signedDate} />
-                                </div>
-
-                                <div className="space-y-3 mt-3">
-                                    <h3 className="text-md font-semibold">Education Background</h3>
-                                    {Array.isArray(data.educationHistory) && data.educationHistory.length > 0 ? (
-                                        <div className="grid grid-cols-1 gap-3">
-                                            {data.educationHistory.map((edu, i) => (
-                                                <div key={i} className="rounded-xl border p-3">
-                                                    <div className="text-sm font-medium">{edu.schoolAttended || "—"}</div>
-                                                    <div className="text-xs text-gray-500">{edu.location ? `${edu.location} • ${edu.field || ""}` : "—"}</div>
-                                                    <div className="text-xs text-gray-500">{edu.major ? `${edu.major} • ${edu.field || ""}` : "—"}</div>
-                                                    <div className="text-xs text-gray-500">{edu.dateAttended ? `${edu.dateAttended} • ${edu.field || ""}` : "—"}</div>
-                                                    <div className="text-xs text-gray-500">{edu.degreeAwarded ? `${edu.degreeAwarded} • ${edu.field || ""}` : "—"}</div>
+                                                <div className="md:col-span-2 flex items-center gap-3">
+                                                    {data.educationHistory.length > 1 && (
+                                                        <button type="button" onClick={() => removeEducation(idx)} className="rounded-2xl border px-3 py-2 text-sm">Remove</button>
+                                                    )}
+                                                    {idx === data.educationHistory.length - 1 && (
+                                                        <button type="button" onClick={addEducation} className="rounded-2xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Add another</button>
+                                                    )}
                                                 </div>
-                                            ))}
-                                        </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </section>
+                            )}
+                            {step === 3 && (
+                                <section className="space-y-6">
+                                    <div className="space-y-4">
+                                        <h3 className="text-md font-semibold">Family Members</h3>
+                                        {Array.isArray(data.familyMembers) && data.familyMembers.map((fam, idx) => (
+                                            <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-xl p-3">
+
+                                                <TextField label="Family Member Name" name={`familyMemberName-${idx}`} value={fam.familyMemberName} onChange={(n, v) => updateFamily(idx, "familyMemberName", v)} />
+
+                                                <TextField label="Nationality" name={`nationality-${idx}`} value={fam.nationality} onChange={(n, v) => updateFamily(idx, "nationality", v)} />
+
+                                                <TextField label="Mobile Number" name={`mobileNumber-${idx}`} value={fam.mobileNumber} onChange={(n, v) => updateFamily(idx, "mobileNumber", v)} />
+
+                                                <TextField label="Email" name={`email-${idx}`} type="email" value={fam.email} onChange={(n, v) => updateFamily(idx, "email", v)} />
+
+                                                <TextField label="Profession" name={`profession-${idx}`} type="text" value={fam.profession} onChange={(n, v) => updateFamily(idx, "profession", v)} />
+
+                                                <TextField label="Work Place" name={`workPlace-${idx}`} type="text" value={fam.workPlace} onChange={(n, v) => updateFamily(idx, "workPlace", v)} />
+
+                                                <TextField label="Relationship" name={`relationship-${idx}`} type="text" value={fam.relationship} onChange={(n, v) => updateFamily(idx, "relationship", v)} />
+
+                                                <div className="md:col-span-2 flex items-center gap-3">
+                                                    {data.familyMembers.length > 1 && (
+                                                        <button type="button" onClick={() => removeFamilyMember(idx)} className="rounded-2xl border px-3 py-2 text-sm">Remove</button>
+                                                    )}
+                                                    {idx === data.familyMembers.length - 1 && (
+                                                        <button type="button" onClick={addFamilyMember} className="rounded-2xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Add another</button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </section>
+                            )}
+                            {step === 4 && (
+                                <section className="space-y-6">
+                                    <FileField required label="International Passport Photo (recent)" name="passportphoto" files={data.passportphoto} onFilesChange={updateFiles} accept="image/*" multiple={false} />
+
+                                    <FileField required label="Applicant Signature (Sign on paper and snap)" name="applicantSignature" files={data.applicantSignature} onFilesChange={updateFiles} accept="image/*" multiple={false} />
+
+                                    <FileField required label="Sponsor's Signature (Sign on paper and snap)" name="sponsorSignature" files={data.sponsorSignature} onFilesChange={updateFiles} accept="image/*" multiple={false} />
+
+                                    <FileField label="Academic Transcripts" required name="transcripts" files={data.transcripts} onFilesChange={updateFiles} accept="image/*,application/pdf" multiple />
+
+                                    <FileField required label="Recommendation Letters" name="recommendationLetters" files={data.recommendationLetters} onFilesChange={updateFiles} accept="image/*,application/pdf" multiple />
+
+                                    <FileField required label="Medical Report (pdf format)" name="medicalReport" files={data.medicalReport} onFilesChange={updateFiles} accept="application/pdf" multiple />
+
+                                    <FileField required label="Bachelor/Masters Certificate (pdf format)" name="certificates" files={data.certificates} onFilesChange={updateFiles} accept="application/pdf" multiple />
+
+                                    <FileField required label="Bank Statement (pdf format)" name="bankStatement" files={data.bankStatement} onFilesChange={updateFiles} accept="application/pdf" multiple />
+
+                                    <FileField required label="Non-Criminal Record (pdf format)" name="nonCriminalRecord" files={data.nonCriminalRecord} onFilesChange={updateFiles} accept="application/pdf" multiple />
+
+                                    <FileField required label="English Language Proficiency Certificate (Non-English Speaking Countries)" name="englishCertificate" files={data.englishCertificate} onFilesChange={updateFiles} accept="application/pdf" multiple />
+
+                                    <FileField label="Research Proposal (doc format)"
+                                        accept=".pdf, .doc, .docx" name="researchProposal" files={data.researchProposal} onFilesChange={updateFiles} multiple />
+                                </section>
+                            )}
+                            {step === 5 && (
+                                <section className="space-y-4">
+                                    <h2 className="text-lg font-semibold">Review your details</h2>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <ReviewItem label="Major First Choice" value={`${data.majorFirstChoice}`} />
+                                        <ReviewItem label="Major Second Choice" value={data.majorSecondChoice} />
+                                        <ReviewItem label="Surname" value={data.surName} />
+                                        <ReviewItem label="Firstname" value={data.firstName} />
+                                        <ReviewItem label="Middlename" value={data.middleName} />
+                                        <ReviewItem label="Email" value={data.email} />
+                                        <ReviewItem label="Phone" value={data.phone} />
+                                        <ReviewItem label="Gender" value={data.gender} />
+                                        <ReviewItem label="Date of Birth" value={data.dob} />
+                                        <ReviewItem label="Nationality" value={data.nationality} />
+                                        <ReviewItem label="Chinese Name" value={data.chineseName} />
+                                        <ReviewItem label="Native Language" value={data.nativeLanguage} />
+                                        <ReviewItem label="Passport Number" value={data.passportNumber} />
+                                        <ReviewItem label="Passport Expiry Date" value={data.passportExpiryDate} />
+                                        <ReviewItem label="Religion" value={data.religion} />
+                                        <ReviewItem label="MaritalStatus" value={data.maritalStatus} />
+                                        <ReviewItem label="Place Of Birth" value={data.placeOfBirth} />
+                                        <ReviewItem label="Permanent Home Address" value={data.permanentHomeAddress} />
+                                        <ReviewItem label="Fax" value={data.fax} />
+                                        <ReviewItem label="Zip Code" value={data.zipCode} />
+                                    </div>
+                                    <h3 className="text-md font-semibold mt-8 mb-2">More Applicant Info</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <ReviewItem label="Rate Your Chinese" value={data.rateYourChinese} />
+                                        <ReviewItem label="Rate Your English" value={data.rateYourEnglish} />
+                                        <ReviewItem label="Field Of Study" value={data.fieldOfStudy} />
+                                        <ReviewItem label="Study Category" value={data.studyCategory} />
+                                        <ReviewItem label="Duration Of Study From" value={data.durationOfStudyFrom} />
+                                        <ReviewItem label="Duration Of Study To" value={data.durationOfStudyTo} />
+                                        <ReviewItem label="Employer" value={data.employer} />
+                                        <ReviewItem label="Location" value={data.location} />
+                                        <ReviewItem label="Position" value={data.position} />
+                                        <ReviewItem label="Date Started" value={data.dateStarted} />
+                                        <ReviewItem label="Financial Sponsor Name" value={data.financialSponsorName} />
+                                        <ReviewItem label="Address" value={data.address} />
+                                        <ReviewItem label="Relationship With Applicant" value={data.relationshipWithApplicant} />
+                                        <ReviewItem label="MobileNumber" value={data.mobileNumber} />
+                                        <ReviewItem label="Agent" value={data.agent} />
+                                        <ReviewItem label="Sponsor's Comment" value={data.sponsorComment} />
+                                        <ReviewItem label="Signed Date" value={data.signedDate} />
+                                    </div>
+
+                                    <div className="space-y-3 mt-3">
+                                        <h3 className="text-md font-semibold">Education Background</h3>
+                                        {Array.isArray(data.educationHistory) && data.educationHistory.length > 0 ? (
+                                            <div className="grid grid-cols-1 gap-3">
+                                                {data.educationHistory.map((edu, i) => (
+                                                    <div key={i} className="rounded-xl border p-3">
+                                                        <div className="text-sm font-medium">{edu.schoolAttended || "—"}</div>
+                                                        <div className="text-xs text-gray-500">{edu.location ? `${edu.location} • ${edu.field || ""}` : "—"}</div>
+                                                        <div className="text-xs text-gray-500">{edu.major ? `${edu.major} • ${edu.field || ""}` : "—"}</div>
+                                                        <div className="text-xs text-gray-500">{edu.dateAttended ? `${edu.dateAttended} • ${edu.field || ""}` : "—"}</div>
+                                                        <div className="text-xs text-gray-500">{edu.degreeAwarded ? `${edu.degreeAwarded} • ${edu.field || ""}` : "—"}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="text-sm text-gray-500">No education history provided.</div>
+                                        )}
+                                    </div>
+                                    <div className="space-y-3 mt-3">
+                                        <h3 className="text-md font-semibold">Family Members</h3>
+                                        {Array.isArray(data.familyMembers) && data.familyMembers.length > 0 ? (
+                                            <div className="grid grid-cols-1 gap-3">
+                                                {data.familyMembers.map((fam, i) => (
+                                                    <div key={i} className="rounded-xl border p-3">
+                                                        <div className="text-sm font-medium">{fam.familyMemberName || "—"}</div>
+                                                        <div className="text-xs text-gray-500">{fam.nationality ? `${fam.nationality} • ${fam.field || ""}` : "—"}</div>
+                                                        <div className="text-xs text-gray-500">{fam.mobileNumber ? `${fam.mobileNumber} • ${fam.field || ""}` : "—"}</div>
+                                                        <div className="text-xs text-gray-500">{fam.email ? `${fam.email} • ${fam.field || ""}` : "—"}</div>
+                                                        <div className="text-xs text-gray-500">{fam.profession ? `${fam.profession} • ${fam.field || ""}` : "—"}</div>
+                                                        <div className="text-xs text-gray-500">{fam.workPlace ? `${fam.workPlace} • ${fam.field || ""}` : "—"}</div>
+                                                        <div className="text-xs text-gray-500">{fam.relationship ? `${fam.relationship} • ${fam.field || ""}` : "—"}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="text-sm text-gray-500">No Family Members Provided!.</div>
+                                        )}
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <ReviewFiles label="Photo" files={data.photo} />
+                                        <ReviewFiles label="Passport Scan" files={data.passportScan} />
+                                        <ReviewFiles label="Transcripts" files={data.transcripts} />
+                                        <ReviewFiles label="Recommendation Letters" files={data.recommendationLetters} />
+                                        <ReviewFiles label="Personal Statement / CV" files={data.personalStatement} />
+                                    </div>
+                                    {submitted && (<div className="rounded-xl border border-green-200 bg-gray-50 p-4 text-black">
+                                        <h4>申请人保证/I hereby affirm: </h4>
+                                        <p>
+                                            1． 申请表中所填写的内容和提供的材料真实无误；
+                                            All information and materials given in this form are true and correct.
+                                        </p>
+                                        <p>
+                                            2． 在华其间，遵守中国的法律、法规，不从事任何危害中国秩序的、与本人来华学习身份不相符的活动；
+                                            During my stay in China, I shall abide by the laws and decrees of the Chinese government, and will not participate in any activities, which are deemed to be adverse to the social order in China and inappropriate to the capacity as a scholar or
+                                            a
+                                            student.
+                                        </p>
+                                        <p>
+                                            3． 在学期间，遵守学校的校纪、校规，全力投入学习和研究工作。尊重学校的教学安排；
+                                            During my study in China, I shall observe the rules and regulations of the university, and will concentrate on my studies and researches, and will follow the teaching programs made by the university.
+                                        </p>
+                                        <p>
+                                            4． 按规定修完学业，按期回国，不无故在华滞留；
+                                            I shall return to my home country as soon as I complete my scheduled program in China, and will not extend my stay without valid reasons.
+                                        </p>
+                                        <p>
+                                            5． 我一到学校就想办理所有登记手续。我将在抵达后30天内向公安局申请居住证，否则我必须支付延误的罚款。
+                                            I’d like to go through all the procedures of registration to the university as soon as I arrive. I will apply within thirty days of arrival for the residency permit to the Public Security Bureau otherwise I have to pay the forfeit for the
+                                            delay.
+                                            <p>
+                                                申请人签名/Signature of the applicant:____________<br />
+                                                日期/Date:_____________
+                                                无此签名，申请无效/The application is invalid without the applicant’s signature
+                                            </p>
+
+                                        </p>
+
+                                        <h4>申请人在递送本申请表的同时，请提交/Please send with this form</h4>
+                                        <p>
+                                            学历生所需材料Relative documents required for Degree and Scholar applicants:
+                                            <p>
+                                                （1） 护照复印件/One photocopy of your passport(photo page)
+                                            </p>
+                                            <p>
+                                                （2） 最后学历证明/An official certificate of your highest education (or notarized photocopy)
+
+                                            </p>
+                                            <p>
+                                                （3） 学习成绩单/Official academic transcripts (or notarized photocopy)
+
+                                            </p>
+                                            <p>
+                                                （4） 推荐信/Two letters of recommendation (original)
+
+                                            </p>
+                                            <p>
+                                                （5） 家庭收入证明/ An official Certificate of your sponsor’s true family financial situation;
+
+                                            </p>
+                                            <p>
+                                                （6） 健康证明/ Certificate of your health examination records
+                                                无论申请人是否被录取，上述申请材料恕不退还
+                                                Whether the candidate is accepted or not, all the application materials will not be returned
+
+                                            </p>
+
+                                            <b className="font-semibold text-lg">
+                                                Notice: Please fill in this form in capital letter. Duplication of this form is available.
+                                            </b>
+                                            <p>
+                                                注意事项/Note:
+                                                申请人须用中文填写或用英文印刷体填写，其它文字或缺项填写的申请表无效。
+                                                This form is to be completed in Chinese or English (print) only. An incomplete application or complete in language other than Chinese or English is invalid.
+                                            </p>
+                                        </p>
+                                    </div>)}
+                                </section>
+                            )}
+                            <div className="flex items-center justify-between pt-4">
+                                <button type="button" onClick={reset} className="text-sm text-gray-600 underline">Reset form</button>
+                                <div className="flex gap-3">
+                                    {step > 0 && (<button type="button" onClick={back} className="rounded-2xl border px-4 py-2 text-sm font-medium hover:bg-gray-50">Back</button>)}
+                                    {step < STEPS.length - 1 ? (
+                                        <button type="button" onClick={next} className="rounded-2xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700">Continue</button>
                                     ) : (
-                                        <div className="text-sm text-gray-500">No education history provided.</div>
+                                        <button type="submit" className="rounded-2xl bg-green-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-green-700">Submit</button>
                                     )}
                                 </div>
-                                <div className="space-y-3 mt-3">
-                                    <h3 className="text-md font-semibold">Family Members</h3>
-                                    {Array.isArray(data.familyMembers) && data.familyMembers.length > 0 ? (
-                                        <div className="grid grid-cols-1 gap-3">
-                                            {data.familyMembers.map((fam, i) => (
-                                                <div key={i} className="rounded-xl border p-3">
-                                                    <div className="text-sm font-medium">{fam.familyMemberName || "—"}</div>
-                                                    <div className="text-xs text-gray-500">{fam.nationality ? `${fam.nationality} • ${fam.field || ""}` : "—"}</div>
-                                                    <div className="text-xs text-gray-500">{fam.mobileNumber ? `${fam.mobileNumber} • ${fam.field || ""}` : "—"}</div>
-                                                    <div className="text-xs text-gray-500">{fam.email ? `${fam.email} • ${fam.field || ""}` : "—"}</div>
-                                                    <div className="text-xs text-gray-500">{fam.profession ? `${fam.profession} • ${fam.field || ""}` : "—"}</div>
-                                                    <div className="text-xs text-gray-500">{fam.workPlace ? `${fam.workPlace} • ${fam.field || ""}` : "—"}</div>
-                                                    <div className="text-xs text-gray-500">{fam.relationship ? `${fam.relationship} • ${fam.field || ""}` : "—"}</div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="text-sm text-gray-500">No Family Members Provided!.</div>
-                                    )}
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                    <ReviewFiles label="Photo" files={data.photo} />
-                                    <ReviewFiles label="Passport Scan" files={data.passportScan} />
-                                    <ReviewFiles label="Transcripts" files={data.transcripts} />
-                                    <ReviewFiles label="Recommendation Letters" files={data.recommendationLetters} />
-                                    <ReviewFiles label="Personal Statement / CV" files={data.personalStatement} />
-                                </div>
-                                {submitted && (<div className="rounded-xl border border-green-200 bg-gray-50 p-4 text-black">
-                                    <h4>申请人保证/I hereby affirm: </h4>
-                                    <p>
-                                        1． 申请表中所填写的内容和提供的材料真实无误；
-                                        All information and materials given in this form are true and correct.
-                                    </p>
-                                    <p>
-                                        2． 在华其间，遵守中国的法律、法规，不从事任何危害中国秩序的、与本人来华学习身份不相符的活动；
-                                        During my stay in China, I shall abide by the laws and decrees of the Chinese government, and will not participate in any activities, which are deemed to be adverse to the social order in China and inappropriate to the capacity as a scholar or
-                                        a
-                                        student.
-                                    </p>
-                                    <p>
-                                        3． 在学期间，遵守学校的校纪、校规，全力投入学习和研究工作。尊重学校的教学安排；
-                                        During my study in China, I shall observe the rules and regulations of the university, and will concentrate on my studies and researches, and will follow the teaching programs made by the university.
-                                    </p>
-                                    <p>
-                                        4． 按规定修完学业，按期回国，不无故在华滞留；
-                                        I shall return to my home country as soon as I complete my scheduled program in China, and will not extend my stay without valid reasons.
-                                    </p>
-                                    <p>
-                                        5． 我一到学校就想办理所有登记手续。我将在抵达后30天内向公安局申请居住证，否则我必须支付延误的罚款。
-                                        I’d like to go through all the procedures of registration to the university as soon as I arrive. I will apply within thirty days of arrival for the residency permit to the Public Security Bureau otherwise I have to pay the forfeit for the
-                                        delay.
-                                        <p>
-                                            申请人签名/Signature of the applicant:____________<br />
-                                            日期/Date:_____________
-                                            无此签名，申请无效/The application is invalid without the applicant’s signature
-                                        </p>
-
-                                    </p>
-
-                                    <h4>申请人在递送本申请表的同时，请提交/Please send with this form</h4>
-                                    <p>
-                                        学历生所需材料Relative documents required for Degree and Scholar applicants:
-                                        <p>
-                                            （1） 护照复印件/One photocopy of your passport(photo page)
-                                        </p>
-                                        <p>
-                                            （2） 最后学历证明/An official certificate of your highest education (or notarized photocopy)
-
-                                        </p>
-                                        <p>
-                                            （3） 学习成绩单/Official academic transcripts (or notarized photocopy)
-
-                                        </p>
-                                        <p>
-                                            （4） 推荐信/Two letters of recommendation (original)
-
-                                        </p>
-                                        <p>
-                                            （5） 家庭收入证明/ An official Certificate of your sponsor’s true family financial situation;
-
-                                        </p>
-                                        <p>
-                                            （6） 健康证明/ Certificate of your health examination records
-                                            无论申请人是否被录取，上述申请材料恕不退还
-                                            Whether the candidate is accepted or not, all the application materials will not be returned
-
-                                        </p>
-
-                                        <b className="font-semibold text-lg">
-                                            Notice: Please fill in this form in capital letter. Duplication of this form is available.
-                                        </b>
-                                        <p>
-                                            注意事项/Note:
-                                            申请人须用中文填写或用英文印刷体填写，其它文字或缺项填写的申请表无效。
-                                            This form is to be completed in Chinese or English (print) only. An incomplete application or complete in language other than Chinese or English is invalid.
-                                        </p>
-                                    </p>
-                                </div>)}
-                            </section>
-                        )}
-                        <div className="flex items-center justify-between pt-4">
-                            <button type="button" onClick={reset} className="text-sm text-gray-600 underline">Reset form</button>
-                            <div className="flex gap-3">
-                                {step > 0 && (<button type="button" onClick={back} className="rounded-2xl border px-4 py-2 text-sm font-medium hover:bg-gray-50">Back</button>)}
-                                {step < STEPS.length - 1 ? (
-                                    <button type="button" onClick={next} className="rounded-2xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700">Continue</button>
-                                ) : (
-                                    <button type="submit" className="rounded-2xl bg-green-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-green-700">Submit</button>
-                                )}
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
