@@ -34,7 +34,8 @@ const Login = () => {
         setToken(response.data.data.access_token);
         setUser(response.data.data.user);
       }).catch((err) => {
-        toast.error("Something went Wrong!");
+        // toast.error("Something went Wrong!");
+        toast.error("Work still in Progress!");
       });
     }
   }

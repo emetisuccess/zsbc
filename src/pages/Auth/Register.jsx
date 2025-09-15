@@ -36,7 +36,8 @@ const Register = () => {
         setToken(data.accessToken);
       }).catch(err => {
         const response = err.response;
-        toast.error("Something went Wrong!");
+        // toast.error("Something went Wrong!");
+        toast.error("Work still in Progress!");
       })
   }
 
