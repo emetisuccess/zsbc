@@ -1,9 +1,44 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react"; // icon library
+import { Toaster, toast } from "react-hot-toast";
+import axiosClient from "../../axios-client";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { Link } from "react-router-dom";
 
 const Register = () => {
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { setUser, setToken } = useStateContext();
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const payload = {
+      email: email,
+      password: password,
+      confirm_password: confirmPassword
+    }
+
+    axiosClient.post("/register", payload)
+      .then(({ data }) => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+        }, 4000);
+        toast.success("User Registered Successfully!")
+        setUser(data.user)
+        setToken(data.accessToken);
+      }).catch(err => {
+        const response = err.response;
+        toast.error("Something went Wrong!");
+      })
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -11,7 +46,7 @@ const Register = () => {
         <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
 
         {/* Register Form */}
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -19,6 +54,8 @@ const Register = () => {
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
             />
           </div>
@@ -31,6 +68,8 @@ const Register = () => {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
                 className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
               />
@@ -52,9 +91,13 @@ const Register = () => {
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm password"
                 className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
               />
+              {confirmPassword && password != confirmPassword ? (<small className="text-red-950">Password doesn't match</small>) : ""}
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -62,15 +105,19 @@ const Register = () => {
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
+
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-[#0061a1] text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+            className="w-full bg-[#0061a1] text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition cursor-pointer"
           >
-            Sign Up
+            {loading ? (<h2>Loading</h2>) : (<span>Submit</span>)}
           </button>
+          <div className="m-0 text-sm">Already have an Account?&nbsp;
+            <Link to='/login' className="underline text-[#0061a1] font-semibold">Login</Link>
+          </div>
         </form>
 
         {/* Divider */}

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from "react-router";
+import { ContextProvider } from "./contexts/ContextProvider.jsx";
 import Apply from "./pages/Apply.jsx";
 import Home from "./pages/Home.jsx";
 import Header from './layouts/Navbar.jsx'
@@ -15,27 +16,31 @@ import Translation from "./pages/Translation.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" index element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/apply" element={<Apply />} />
-        <Route path="/majors" element={<Majors />} />
-        <Route path="/admission" element={<Admission />} />
-        <Route path="/business" element={<Business />} />
-        <Route path="/goods" element={<Goods />} />
-        <Route path="/translation" element={<Translation />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <ContextProvider>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" index element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/apply" element={<Apply />} />
+          <Route path="/majors" element={<Majors />} />
+          <Route path="/admission" element={<Admission />} />
+          <Route path="/business" element={<Business />} />
+          <Route path="/goods" element={<Goods />} />
+          <Route path="/translation" element={<Translation />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </ContextProvider>
   </StrictMode>,
 )

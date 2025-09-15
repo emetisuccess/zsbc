@@ -48,7 +48,7 @@ const Majors = () => {
           {/* Right Side Cards */}
           <div className="grid sm:grid-cols-3 gap-6">
             {cards.map((card) => (
-              <div className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
+              <div key={card.id} className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
                 <img
                   src={card.image}
                   alt={card.title}

@@ -1,12 +1,27 @@
 import React from "react";
 import Breadcrum from "../layouts/Breadcrum";
 import ApplyNow from "../layouts/ApplyNow";
+import { useStateContext } from "../contexts/ContextProvider";
+import { Navigate } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
+
 
 const Contact = () => {
+
+  const { token } = useStateContext();
+  if (!token) {
+    toast.error("Login to have Access!", {
+      id: "contact",
+    });
+    return <Navigate to="/login" />
+  }
+
+
   return (
     <div>
       <Breadcrum heading={`Contact Us`} page_title={`Contact Us`} />
       <section className="w-full">
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 ">
           {/* Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 py-3">

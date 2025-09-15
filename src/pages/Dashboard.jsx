@@ -7,9 +7,16 @@ import {
   Menu,
   LogOut,
 } from "lucide-react";
+import { useStateContext } from "../contexts/ContextProvider";
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+
+  const { user, token } = useStateContext();
+  if (!token) {
+    return <Navigate to="/login" />
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">

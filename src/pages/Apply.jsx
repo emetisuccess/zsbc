@@ -1,6 +1,11 @@
 import { DatabaseIcon } from "lucide-react";
 import Breadcrum from "../layouts/Breadcrum";
 import { useMemo, useState, useEffect } from "react";
+import { Toaster, toast } from "react-hot-toast";
+import { useStateContext } from "../contexts/ContextProvider";
+import { Navigate } from "react-router-dom";
+
+
 
 const STEPS = ["Personal", "More User Info", "Education", "Family Members", "Documents", "Review & Submit"];
 
@@ -101,10 +106,6 @@ const requiredFieldsByStep = {
         "studyCategory",
         "durationOfStudyFrom",
         "durationOfStudyTo",
-        "employer",
-        "location",
-        "position",
-        "dateStarted",
         "financialSponsorName",
         "address",
         "relationshipWithApplicant",
@@ -112,7 +113,12 @@ const requiredFieldsByStep = {
         "agent",
         "sponsorComment",
         "signedDate"],
-    2: ["educationHistory"],
+    2: ["educationHistory",
+        "employer",
+        "location",
+        "position",
+        "dateStarted",
+    ],
     3: ["familyMembers"],
     4: [
         "passportphoto",
@@ -265,13 +271,23 @@ function FileField({ label, name, files = [], onFilesChange, accept, multiple = 
 }
 
 function ErrorBanner({ errors = [] }) {
-    if (!errors || errors.length === 0) return null; return (
-        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"><strong className="block mb-1">Please fix the following:</strong><ul className="list-disc pl-5 space-y-1">{errors.map((e, i) => <li key={i}>{e}</li>)}</ul></div>
-    );
+    const uniqueErrors = [...new Set(errors)];
+    if (!errors || uniqueErrors.length === 0) {
+        return null;
+    } else {
+        return (
+            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"><strong className="block mb-1">Please fix the following:</strong>
+                <ul className="list-disc pl-5 space-y-1">
+                    {uniqueErrors.map((e, i) => <li key={i}>{e}</li>)}
+                </ul>
+            </div>
+        );
+    }
 }
 
 export default function ChinaAdmissionForm() {
 
+    const { user, token } = useStateContext();
     const [step, setStep] = useState(0);
     const [data, setData] = useSavedForm("china-admission-form", initialData);
     const [errors, setErrors] = useState([]);
@@ -280,6 +296,13 @@ export default function ChinaAdmissionForm() {
     const [submitted, setSubmitted] = useState(false);
     const update = (name, value) => setData((p) => ({ ...p, [name]: value }));
     const updateFiles = (name, newFiles, append = false) => setData((prev) => ({ ...prev, [name]: append ? [...(prev[name] || []), ...newFiles] : newFiles }));
+
+    if (!token) {
+        toast.error("Login to have Access!", {
+            id: "apply",
+        })
+        return <Navigate to="/login" />
+    }
 
     const updateEducation = (index, field, value) => {
         setData((prev) => {
@@ -434,12 +457,6 @@ export default function ChinaAdmissionForm() {
             if (expiryDate <= today) errs.push("Your Passport has expired!");
             if (data.passportNumber.length > 9 || data.passportNumber.length < 9) errs.push("Invalid Passport Number!");
         }
-        if (s === 1) {
-            if (data.hasChinaVisa === "yes") {
-                if (!data.visaType) errs.push("Visa Type is required when you have a China visa");
-                if (!data.visaExpiry) errs.push("Visa Expiry is required when you have a China visa");
-            }
-        }
 
         setEducationErrors(eduErrs);
         setFamilyMemberErrors(famErrs);
@@ -461,24 +478,30 @@ export default function ChinaAdmissionForm() {
             }
         }
         setSubmitted(true);
+        toast.success("User Info Submitted Successfully!");
     };
 
-
-
+    const options = {
+        duration: 3000,
+        style: { background: "#0061a1", color: "#fff" },
+    }
     return (
         <div>
             <Breadcrum heading={`Application Form`} page_title={`Application form`} />
             <div className="min-h-screen bg-gray-50 py-10">
+                <Toaster position="top-right" autoClose={3000} toastOptions={options} />
                 <div className="mx-auto max-w-6xl px-4">
                     <div className="mb-8 text-center"><h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admission Application – Study in China</h1><p className="text-gray-600 mt-2">Complete the steps below. Your progress is saved locally in your browser.</p></div>
                     <div className="bg-white rounded-2xl shadow-sm border p-6 md:p-8">
                         <StepIndicator currentStep={step} />
                         <ErrorBanner errors={errors} />
                         <form onSubmit={onSubmit} className="space-y-6">
+
                             {step === 0 && (
-                                <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <TextField required label="Major First Choice" name="majorFirstChoice" value={data.majorFirstChoice} onChange={update} />
+                                <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <TextField label="Major First Choice" required name="majorFirstChoice" value={data.majorFirstChoice} onChange={update} />
                                     <TextField label="Major Second Choice" name="majorSecondChoice" value={data.majorSecondChoice} onChange={update} />
+
                                     <TextField required label="Surname" name="surName" value={data.surName} onChange={update} />
                                     <TextField required label="First Name" name="firstName" value={data.firstName} onChange={update} />
                                     <TextField required label="Middle Name" name="middleName" value={data.middleName} onChange={update} />
@@ -497,7 +520,7 @@ export default function ChinaAdmissionForm() {
                                     <TextField required label="Permanent Home Address" name="permanentHomeAddress" value={data.permanentHomeAddress} onChange={update} />
                                     <TextField label="Fax" name="fax" value={data.fax} onChange={update} />
                                     <TextField label="Zip Code" name="zipCode" value={data.zipCode} onChange={update} />
-                                    <RadioGroup required label="Gender" name="gender" value={data.gender} onChange={update} options={["Male", "Female", "Other"]} />
+                                    <RadioGroup required label="Gender" name="gender" value={data.gender} onChange={update} options={["Male", "Female"]} />
                                 </section>
                             )}
                             {step === 1 && (
@@ -530,39 +553,6 @@ export default function ChinaAdmissionForm() {
                                             onChange={update}
                                         />
                                     </div>
-                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Work Experience</p>
-                                    <div className="grid md:grid-cols-2 gap-2">
-                                        <TextField
-                                            label="Employee"
-                                            required
-                                            name="employer"
-                                            value={data.employer}
-                                            onChange={update}
-                                        />
-                                        <TextField
-                                            label="Location"
-                                            required
-                                            name="location"
-                                            value={data.location}
-                                            onChange={update}
-                                        />
-                                        <TextField
-                                            label="Position"
-                                            required
-                                            name="position"
-                                            value={data.position}
-                                            onChange={update}
-                                        />
-                                        <TextField
-                                            type="date"
-                                            label="Date Started"
-                                            required
-                                            name="dateStarted"
-                                            value={data.dateStarted}
-                                            onChange={update}
-                                        />
-                                    </div>
-
                                     <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Financial Sponsors</p>
                                     <div className="grid md:grid-cols-2 gap-2">
                                         <TextField
@@ -654,6 +644,40 @@ export default function ChinaAdmissionForm() {
                                             </div>
                                         ))}
                                     </div>
+                                    <div className="space-y-6">
+                                        <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Work Experience</p>
+                                        <div className="grid md:grid-cols-2 gap-2">
+                                            <TextField
+                                                label="Employer"
+                                                required
+                                                name="employer"
+                                                value={data.employer}
+                                                onChange={update}
+                                            />
+                                            <TextField
+                                                label="Location"
+                                                required
+                                                name="location"
+                                                value={data.location}
+                                                onChange={update}
+                                            />
+                                            <TextField
+                                                label="Position"
+                                                required
+                                                name="position"
+                                                value={data.position}
+                                                onChange={update}
+                                            />
+                                            <TextField
+                                                type="date"
+                                                label="Date Started"
+                                                required
+                                                name="dateStarted"
+                                                value={data.dateStarted}
+                                                onChange={update}
+                                            />
+                                        </div>
+                                    </div>
                                 </section>
                             )}
                             {step === 3 && (
@@ -719,7 +743,7 @@ export default function ChinaAdmissionForm() {
                             {step === 5 && (
                                 <section className="space-y-4">
                                     <h2 className="text-lg font-semibold">Review your details</h2>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <ReviewItem label="Major First Choice" value={`${data.majorFirstChoice}`} />
                                         <ReviewItem label="Major Second Choice" value={data.majorSecondChoice} />
                                         <ReviewItem label="Surname" value={data.surName} />
@@ -742,7 +766,7 @@ export default function ChinaAdmissionForm() {
                                         <ReviewItem label="Zip Code" value={data.zipCode} />
                                     </div>
                                     <h3 className="text-md font-semibold mt-8 mb-2">More Applicant Info</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <ReviewItem label="Rate Your Chinese" value={data.rateYourChinese} />
                                         <ReviewItem label="Rate Your English" value={data.rateYourEnglish} />
                                         <ReviewItem label="Field Of Study" value={data.fieldOfStudy} />
@@ -800,12 +824,18 @@ export default function ChinaAdmissionForm() {
                                             <div className="text-sm text-gray-500">No Family Members Provided!.</div>
                                         )}
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                        <ReviewFiles label="Photo" files={data.photo} />
-                                        <ReviewFiles label="Passport Scan" files={data.passportScan} />
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                                        <ReviewFiles label="Passport Photo" files={data.passportphoto} />
+                                        <ReviewFiles label="Applicant Signature" files={data.applicantSignature} />
                                         <ReviewFiles label="Transcripts" files={data.transcripts} />
                                         <ReviewFiles label="Recommendation Letters" files={data.recommendationLetters} />
-                                        <ReviewFiles label="Personal Statement / CV" files={data.personalStatement} />
+                                        <ReviewFiles label="Sponsor Signature" files={data.sponsorSignature} />
+                                        <ReviewFiles label="Medical Report" files={data.medicalReport} />
+                                        <ReviewFiles label="Certificates" files={data.certificates} />
+                                        <ReviewFiles label="Bank Statement" files={data.bankStatement} />
+                                        <ReviewFiles label="Non Criminal Record" files={data.nonCriminalRecord} />
+                                        <ReviewFiles label="English Certificate" files={data.englishCertificate} />
+                                        <ReviewFiles label="Research Proposal" files={data.researchProposal} />
                                     </div>
                                     {submitted && (<div className="rounded-xl border border-green-200 bg-gray-50 p-4 text-black">
                                         <h4>申请人保证/I hereby affirm: </h4>
@@ -913,6 +943,6 @@ function ReviewFiles({ label, files = [] }) {
 }
 
 function labelFor(field) {
-    const labels = { firstName: "First Name", surName: " Surname", email: "Email", phone: "Phone", nationality: "Nationality", dob: "Date of Birth", gender: "Gender", passportNumber: "Passport Number", passportExpiryDate: "Passport Expiry Date", hasChinaVisa: "China Visa", visaType: "Visa Type", visaExpiry: "Visa Expiry", highestQualification: "Highest Qualification", gpaOrScore: "GPA / Score", englishProficiency: "English Proficiency", hskLevel: "HSK Level", intendedIntake: "Intended Intake", intendedCity: "Preferred City", universityPreference: "University Preference", programType: "Program Type", major: "Intended Major", photo: "Passport Photo", passportScan: "Passport Scan", transcripts: "Transcripts", recommendationLetters: "Recommendation Letters", personalStatement: "Personal Statement / CV" };
+    const labels = { majorFirstChoice: "Major First Choice", firstName: "First Name", surName: " Surname", email: "Email", phone: "Phone", nationality: "Nationality", dob: "Date of Birth", gender: "Gender", passportNumber: "Passport Number", passportExpiryDate: "Passport Expiry Date", hasChinaVisa: "China Visa", visaType: "Visa Type", visaExpiry: "Visa Expiry", highestQualification: "Highest Qualification", englishProficiency: "English Proficiency", hskLevel: "HSK Level", intendedCity: "Preferred City", programType: "Program Type", major: "Intended Major", photo: "Passport Photo", passportScan: "Passport Scan", transcripts: "Transcripts", recommendationLetters: "Recommendation Letters" };
     return labels[field] || field;
 }

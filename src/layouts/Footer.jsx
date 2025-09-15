@@ -1,6 +1,13 @@
 import { Twitter, Facebook, Instagram, Phone, Mail } from "lucide-react";
+import { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
+
 const Footer = () => {
+
+  const options = {
+    duration: 3000,
+    style: { background: "#0061a1", color: "#fff" }
+  }
   return (
     <section className="bg-[#0061a1] text-white flex flex-col items-center mx-auto">
       <footer className="text-gray-200 py-10">
@@ -113,6 +120,7 @@ const Footer = () => {
           </div>
         </div>
       </footer>
+      <Toaster position="top-right" autoClose={3000} toastOptions={options} />
     </section>
   )
 }

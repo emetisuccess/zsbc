@@ -198,7 +198,7 @@ const Home = () => {
           {/* Right Side Cards */}
           <div className="grid sm:grid-cols-3 gap-6">
             {cards.map((card) => (
-              <div className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
+              <div key={card.id} className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
                 <img
                   src={card.image}
                   alt={card.title}
@@ -219,7 +219,7 @@ const Home = () => {
               </div>
             ))}
           </div>
-          <a href='javascript:0' className="text-2xl text-right underline">View other Majors</a>
+          <Link to='/majors' className="text-2xl text-right underline">View other Majors</Link>
         </div>
       </section>
       <section className="relative w-full h-fit flex items-center justify-center">
