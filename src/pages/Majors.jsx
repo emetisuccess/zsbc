@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Breadcrum from "../layouts/Breadcrum"
 import Logo from "../assets/logos/zsbc_icon.png"
 import AboutImage from "../assets/images/about.jpg";
+import { Link } from "react-router-dom";
 
 const Majors = () => {
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,8 @@ const Majors = () => {
       <Breadcrum heading={`Majors`} page_title={`Majors`} imagePath={AboutImage} />
       <section className="py-16 px-6 md:px-1">
         <div className="max-w-6xl mx-auto grid md:grid-cols-1 gap-10 items-center">
+          <p className="py-2 my-3 border-l-8 border-[#0061a1] text-center border-r-8 bg-gray-100  text-2xl">If your preferred Major is not here, kindly click on this link <Link to='/apply' className="ml-4 underline">Apply Here</Link>
+          </p>
           {/* Title */}
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">

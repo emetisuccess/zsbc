@@ -37,7 +37,7 @@ const Register = () => {
       }
       const data = await res.json();
       if (data) {
-        console.log(data);
+        // console.log(data);
         window.location.href = data.url; // redirect to Google login
       }
     } catch (error) {
@@ -97,8 +97,7 @@ const Register = () => {
           setEmail("");
           setConfirmPassword("");
           setTimeout(() => {
-            return <Navigate to="/verify-code" />
-            // window.location.href = "/verify-code"
+            window.location.href = "/verify-code"
           }, 4000);
         } else {
           toast.error("User Registration Failed!");

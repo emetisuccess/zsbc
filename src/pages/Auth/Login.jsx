@@ -36,7 +36,7 @@ const Login = () => {
       }
       const data = await res.json();
       if (data) {
-        console.log(data);
+        // console.log(data);
         window.location.href = data.url; // redirect to Google login
       }
     } catch (error) {

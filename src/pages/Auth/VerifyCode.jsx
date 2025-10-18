@@ -71,8 +71,7 @@ const VerifyCode = () => {
                     setToken(data.token);
                     setUser(data.user);
                     setTimeout(() => {
-                        return <Navigate to="/login" />
-                        // window.location.href = "/login"
+                        window.location.href = "/login"
                     }, 3000);
                     return;
                 }

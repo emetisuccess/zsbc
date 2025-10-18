@@ -38,8 +38,7 @@ function ResetPassword() {
                 setPassword("");
                 setConfirm("");
                 setTimeout(() => {
-                    return <Navigate to="/login" />
-                    // window.location.href = "/login"
+                    window.location.href = "/login"
                 }, 3000);
                 return;
             }

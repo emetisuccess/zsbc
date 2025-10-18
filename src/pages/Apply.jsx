@@ -641,8 +641,7 @@ export default function ChinaAdmissionForm() {
                     localStorage.removeItem("ACCESS_TOKEN");
                     toast.error("Login to Submit Application!");
                     const timer = setTimeout(() => {
-                        return <Navigate to="/login" />
-                        // window.location.href = "/login";
+                        window.location.href = "/login";
                     }, 4000);
                     return () => clearTimeout(timer);
                 }

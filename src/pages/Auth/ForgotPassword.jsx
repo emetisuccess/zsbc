@@ -31,7 +31,7 @@ export default function ForgotPasswordForm() {
                 toast.success(data.message);
                 setEmail("");
                 setTimeout(() => {
-                    return <Navigate to="/verify-otp" />
+                    window.location.href = "/verify-otp"
                 }, 4000);
                 return;
             }
