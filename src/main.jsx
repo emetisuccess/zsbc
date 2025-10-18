@@ -17,6 +17,12 @@ import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import ForgotResetPassword from "./pages/Auth/ForgotPassword.jsx";
+import VerifyCode from "./pages/Auth/VerifyCode.jsx";
+import ResetPassword from "./pages/Auth/ResetPassword.jsx";
+import VerifyResetPasswordOtp from "./pages/Auth/VerifyResetPasswordOtp.jsx"
+import GoogleSuccess from "./pages/Auth/GoogleSuccess.jsx";
+import List from "./pages/dashboard/application/List.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -35,9 +41,15 @@ createRoot(document.getElementById('root')).render(
           <Route path="/translation" element={<Translation />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/verify-code" element={<VerifyCode />} />
+          <Route path="/verify-otp" element={<VerifyResetPasswordOtp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotResetPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/google-success" element={<GoogleSuccess />} />
+          <Route path="/list-application" element={<List />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>

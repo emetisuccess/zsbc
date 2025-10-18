@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Navigate } from "react-router-dom";
+import AboutImage from "../assets/images/about.jpg";
 
 
 
@@ -70,16 +71,16 @@ const initialData = {
         relationship: ""
     }],
     passportphoto: [],
-    applicantSignature: "",
-    sponsorSignature: "",
+    applicantSignature: null,
+    sponsorSignature: null,
     transcripts: [],
     recommendationLetters: [],
     medicalReport: [],
     certificates: [],
-    bankStatement: "",
-    nonCriminalRecord: "",
-    englishCertificate: "",
-    researchProposal: "",
+    bankStatement: [],
+    nonCriminalRecord: [],
+    englishCertificate: [],
+    researchProposal: [],
 };
 
 const requiredFieldsByStep = {
@@ -119,19 +120,21 @@ const requiredFieldsByStep = {
         "position",
         "dateStarted",
     ],
-    3: ["familyMembers"],
+    3: [
+        "familyMembers"
+    ],
     4: [
-        "passportphoto",
-        "applicantSignature",
-        "sponsorSignature",
-        "transcripts",
-        "recommendationLetters",
-        "medicalReport",
-        "certificates",
-        "bankStatement",
-        "nonCriminalRecord",
-        "englishCertificate",
-        "researchProposal"
+        "passportphoto",//required
+        "applicantSignature",//required
+        "sponsorSignature",//required
+        // "transcripts",
+        // "recommendationLetters",
+        // "medicalReport",
+        // "certificates",
+        // "bankStatement",
+        // "nonCriminalRecord",
+        // "englishCertificate",
+        // "researchProposal"
     ]
 };
 
@@ -143,7 +146,19 @@ const validators = {
 };
 
 function useSavedForm(key, initial) {
-    const fileKeys = ["photo", "passportScan", "transcripts", "recommendationLetters", "personalStatement"];
+
+    const fileKeys = ["passportphoto",
+        "applicantSignature",
+        "sponsorSignature",
+        "transcripts",
+        "recommendationLetters",
+        "medicalReport",
+        "certificates",
+        "bankStatement",
+        "nonCriminalRecord",
+        "englishCertificate",
+        "researchProposal"];
+
     const [state, setState] = useState(() => {
         try {
             const raw = localStorage.getItem(key);
@@ -154,6 +169,7 @@ function useSavedForm(key, initial) {
             return initial;
         }
     });
+
     useEffect(() => {
         try {
             const toSave = { ...state };
@@ -163,6 +179,7 @@ function useSavedForm(key, initial) {
             console.log("erro");
         }
     }, [key, state]);
+
     return [state, setState];
 }
 
@@ -233,9 +250,29 @@ function RadioGroup({ label, name, value = "", onChange, options = [], required 
     );
 }
 
-function FileField({ label, name, files = [], onFilesChange, accept, multiple = true, required }) {
-    const previews = useMemo(() => (Array.isArray(files) ? files.map((file) => ({ file, url: file && file.type && file.type.startsWith("image/") ? URL.createObjectURL(file) : null })) : []), [files]);
-    useEffect(() => () => { previews.forEach((p) => p.url && URL.revokeObjectURL(p.url)); }, [previews]);
+function FileField({
+    label,
+    name,
+    files = [],
+    onFilesChange,
+    accept,
+    multiple = true,
+    required
+}) {
+    const previews = useMemo(() => (
+        Array.isArray(files) ? files.map((file) => ({
+            file,
+            url: file && file.type && file.type.startsWith("image/")
+                ? URL.createObjectURL(file)
+                : null
+        }))
+            : []
+    ), [files]);
+
+    useEffect(() => () => {
+        previews.forEach((p) => p.url && URL.revokeObjectURL(p.url));
+    }, [previews]);
+
     const removeAt = (idx) => {
         const next = Array.from(files || []);
         next.splice(idx, 1);
@@ -270,6 +307,7 @@ function FileField({ label, name, files = [], onFilesChange, accept, multiple = 
     );
 }
 
+
 function ErrorBanner({ errors = [] }) {
     const uniqueErrors = [...new Set(errors)];
     if (!errors || uniqueErrors.length === 0) {
@@ -287,9 +325,10 @@ function ErrorBanner({ errors = [] }) {
 
 export default function ChinaAdmissionForm() {
 
-    const { user, token } = useStateContext();
+    const { token } = useStateContext();
     const [step, setStep] = useState(0);
-    const [data, setData] = useSavedForm("china-admission-form", initialData);
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useSavedForm("zsbc-admission-form", initialData);
     const [errors, setErrors] = useState([]);
     const [educationErrors, setEducationErrors] = useState({});
     const [familyMembers, setFamilyMemberErrors] = useState({});
@@ -297,10 +336,8 @@ export default function ChinaAdmissionForm() {
     const update = (name, value) => setData((p) => ({ ...p, [name]: value }));
     const updateFiles = (name, newFiles, append = false) => setData((prev) => ({ ...prev, [name]: append ? [...(prev[name] || []), ...newFiles] : newFiles }));
 
+
     if (!token) {
-        toast.error("Login to have Access!", {
-            id: "apply",
-        })
         return <Navigate to="/login" />
     }
 
@@ -321,11 +358,11 @@ export default function ChinaAdmissionForm() {
     };
 
     const addEducation = () => {
-        setData((prev) => ({ ...prev, educationHistory: [...(prev.educationHistory || []), { schoolAttended: "", location: "", major: "", startDate: "", dateAttended: "", degreeAwarded: "" }] }));
+        setData((prev) => ({ ...prev, educationHistory: [...(prev.educationHistory || []), { schoolAttended: "", location: "", major: "", dateAttended: "", degreeAwarded: "" }] }));
     };
 
     const addFamilyMember = () => {
-        setData((prev) => ({ ...prev, familyMembers: [...(prev.familyMembers || []), { familMemberName: "", nationality: "", mobileNumber: "", email: "", profession: "", workPlace: "", relationship: "" }] }));
+        setData((prev) => ({ ...prev, familyMembers: [...(prev.familyMembers || []), { familyMemberName: "", nationality: "", mobileNumber: "", email: "", profession: "", workPlace: "", relationship: "" }] }));
     };
 
 
@@ -464,30 +501,176 @@ export default function ChinaAdmissionForm() {
         return errs.length === 0;
     };
 
-
-
-    const next = () => { if (!validateStep(step)) return; setStep((s) => Math.min(s + 1, STEPS.length - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+    const next = () => {
+        if (!validateStep(step)) return; setStep((s) => Math.min(s + 1, STEPS.length - 1));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
     const back = () => setStep((s) => Math.max(s - 1, 0));
     const reset = () => { setData(initialData); setStep(0); setErrors([]); setSubmitted(false); };
-    const onSubmit = (e) => {
+
+
+
+    // On submit
+    const onSubmit = async (e) => {
         e.preventDefault();
+        // console.log(data.applicantSignature);
+        // return;
         for (let i = 0; i < STEPS.length - 1; i++) {
             if (!validateStep(i)) {
                 setStep(i);
                 return;
             }
         }
-        setSubmitted(true);
-        toast.success("User Info Submitted Successfully!");
-    };
+
+        const formData = new FormData();
+        formData.append("majorFirstChoice", data.majorFirstChoice);
+        formData.append("majorSecondChoice", data.majorSecondChoice);
+        formData.append("surName", data.surName);
+        formData.append("firstName", data.firstName);
+        formData.append("middleName", data.middleName);
+        formData.append("email", data.email);
+        formData.append("phone", data.phone);
+        formData.append("gender", data.gender);
+        formData.append("dob", data.dob);
+        formData.append("nationality", data.nationality);
+        formData.append("chineseName", data.chineseName);
+        formData.append("nativeLanguage", data.nativeLanguage);
+        formData.append("passportNumber", data.passportNumber);
+        formData.append("passportExpiryDate", data.passportExpiryDate);
+        formData.append("religion", data.religion);
+        formData.append("maritalStatus", data.maritalStatus);
+        formData.append("placeOfBirth", data.placeOfBirth);
+        formData.append("permanentHomeAddress", data.permanentHomeAddress);
+        formData.append("fax", data.fax);
+        formData.append("zipCode", data.zipCode);
+        formData.append("rateYourChinese", data.rateYourChinese);
+        formData.append("rateYourEnglish", data.rateYourEnglish);
+        formData.append("fieldOfStudy", data.fieldOfStudy);
+        formData.append("studyCategory", data.studyCategory);
+        formData.append("durationOfStudyFrom", data.durationOfStudyFrom);
+        formData.append("durationOfStudyTo", data.durationOfStudyTo);
+        formData.append("employer", data.employer);
+        formData.append("location", data.location);
+        formData.append("position", data.position);
+        formData.append("dateStarted", data.dateStarted);
+        formData.append("financialSponsorName", data.financialSponsorName);
+        formData.append("address", data.address);
+        formData.append("relationshipWithApplicant", data.relationshipWithApplicant);
+        formData.append("mobileNumber", data.mobileNumber);
+        formData.append("agent", data.agent);
+        formData.append("sponsorComment", data.sponsorComment);
+        formData.append("signedDate", data.signedDate);
+        formData.append("educationHistory", JSON.stringify(data.educationHistory));
+        formData.append("familyMembers", JSON.stringify(data.familyMembers));
+
+
+        // files documents
+        data.passportphoto.forEach((file, i) => {
+            formData.append(`passportphoto[${i}]`, file);
+        });
+
+        data.sponsorSignature.forEach((file, i) => {
+            formData.append(`sponsorSignature[${i}]`, file);
+        });
+
+        data.applicantSignature.forEach((file, i) => {
+            formData.append(`applicantSignature[${i}]`, file);
+        });
+
+        if (data.transcripts) {
+            data.transcripts.forEach((file, i) => {
+                formData.append(`transcripts[${i}]`, file);
+            });
+        }
+
+        if (data.recommendationLetters) {
+            data.recommendationLetters.forEach((file, i) => {
+                formData.append(`recommendationLetters[${i}]`, file);
+            });
+        }
+
+        if (data.certificates) {
+            data.certificates.forEach((file, i) => {
+                formData.append(`certificates[${i}]`, file);
+            });
+        }
+
+        if (data.medicalReport) {
+            data.medicalReport.forEach((file, i) => {
+                formData.append(`medicalReport[${i}]`, file);
+            });
+        }
+
+        if (data.bankStatement) {
+            data.bankStatement.forEach((file, i) => {
+                formData.append(`bankStatement[${i}]`, file);
+            });
+        }
+
+        if (data.nonCriminalRecord) {
+            data.nonCriminalRecord.forEach((file, i) => {
+                formData.append(`nonCriminalRecord[${i}]`, file);
+            });
+        }
+
+        if (data.englishCertificate) {
+            data.englishCertificate.forEach((file, i) => {
+                formData.append(`englishCertificate[${i}]`, file);
+            });
+        }
+
+        if (data.researchProposal) {
+            data.researchProposal.forEach((file, i) => {
+                formData.append(`researchProposal[${i}]`, file);
+            });
+        }
+
+        setLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/apply`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("ACCESS_TOKEN")}`,
+                    Accept: 'application/json',
+                },
+                body: formData,
+            })
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => null);
+                if (errorData.message == "Unauthenticated.") {
+                    localStorage.removeItem("ACCESS_TOKEN");
+                    toast.error("Login to Submit Application!");
+                    const timer = setTimeout(() => {
+                        window.location.href = "/login";
+                    }, 4000);
+                    return () => clearTimeout(timer);
+                }
+                // toast.error(errorData.message);
+                console.log(errorData.message);
+                return;
+            }
+            const data = await res.json();
+            // console.log(data)
+            toast.success(data.message, { "id": "res_success" });
+            setData(initialData);
+            setStep(0);
+            return;
+        } catch (error) {
+            toast.error(error.message, { "id": "res_error" });
+            // console.log(error.message);
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const options = {
-        duration: 3000,
+        duration: 4000,
         style: { background: "#0061a1", color: "#fff" },
     }
+
     return (
         <div>
-            <Breadcrum heading={`Application Form`} page_title={`Application form`} />
+            <Breadcrum heading={`Application Form`} page_title={`Application form`} imagePath={AboutImage} />
             <div className="min-h-screen bg-gray-50 py-10">
                 <Toaster position="top-right" autoClose={3000} toastOptions={options} />
                 <div className="mx-auto max-w-6xl px-4">
@@ -499,27 +682,33 @@ export default function ChinaAdmissionForm() {
 
                             {step === 0 && (
                                 <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <TextField label="Major First Choice" required name="majorFirstChoice" value={data.majorFirstChoice} onChange={update} />
-                                    <TextField label="Major Second Choice" name="majorSecondChoice" value={data.majorSecondChoice} onChange={update} />
 
-                                    <TextField required label="Surname" name="surName" value={data.surName} onChange={update} />
-                                    <TextField required label="First Name" name="firstName" value={data.firstName} onChange={update} />
-                                    <TextField required label="Middle Name" name="middleName" value={data.middleName} onChange={update} />
-                                    <TextField required label="Email" name="email" type="email" value={data.email} onChange={update} />
+                                    <TextField label="Major First Choice" required name="majorFirstChoice" placeholder="Enter First Choice" value={data.majorFirstChoice} onChange={update} />
+
+                                    <TextField label="Major Second Choice (optional)" name="majorSecondChoice" value={data.majorSecondChoice} placeholder="Enter Second Choice" onChange={update} />
+
+                                    <TextField required label="Surname" name="surName" value={data.surName} onChange={update} placeholder={"Enter Surname"} />
+
+                                    <TextField required label="First Name" name="firstName" value={data.firstName} onChange={update} placeholder={"Enter Firstname"} />
+                                    <TextField required label="Middle Name" name="middleName" value={data.middleName} onChange={update} placeholder={"Enter Middlename"} />
+                                    <TextField required label="Email" name="email" type="email" value={data.email} onChange={update} placeholder={"Enter email e.g example@gmail.com"} />
                                     <TextField required label="Phone" name="phone" value={data.phone} onChange={update} placeholder="+234 800 000 0000" />
-                                    <TextField required label="Nationality" name="nationality" value={data.nationality} onChange={update} />
-                                    <TextField required label="Date of Birth" name="dob" type="date" value={data.dob} onChange={update} />
-                                    <TextField required label="Nationality" name="nationality" value={data.nationality} onChange={update} />
-                                    <TextField label="Chinese Name" name="chineseName" value={data.chineseName} onChange={update} />
-                                    <TextField required label="Native Language" name="nativeLanguage" value={data.nativeLanguage} onChange={update} />
-                                    <TextField required label="Passport Number" name="passportNumber" value={data.passportNumber} onChange={update} />
+
+                                    <TextField required label="Nationality" name="nationality" value={data.nationality} onChange={update} placeholder={"Enter Nationality"} />
+
+                                    <TextField required label="Date of Birth" name="dob" type="date" value={data.dob} onChange={update} placeholder={"Enter accurate date of birth"} />
+
+                                    <TextField label="Chinese Name" name="chineseName" value={data.chineseName} onChange={update} placeholder={"Enter Chinese name if any"} />
+                                    <TextField required label="Native Language" name="nativeLanguage" placeholder={"Enter native language"} value={data.nativeLanguage} onChange={update} />
+                                    <TextField required label="Passport Number" name="passportNumber" placeholder="Enter a valid Passport Number" value={data.passportNumber} onChange={update} />
                                     <TextField required label="Passport Expiry Date" name="passportExpiryDate" type="date" value={data.passportExpiryDate} onChange={update} />
-                                    <TextField required label="Marital Status" name="maritalStatus" value={data.maritalStatus} onChange={update} />
-                                    <TextField required label="Religion" name="religion" value={data.religion} onChange={update} />
-                                    <TextField required label="Place Of Birth" name="placeOfBirth" value={data.placeOfBirth} onChange={update} />
-                                    <TextField required label="Permanent Home Address" name="permanentHomeAddress" value={data.permanentHomeAddress} onChange={update} />
-                                    <TextField label="Fax" name="fax" value={data.fax} onChange={update} />
-                                    <TextField label="Zip Code" name="zipCode" value={data.zipCode} onChange={update} />
+                                    <TextField required label="Marital Status" name="maritalStatus" value={data.maritalStatus} placeholder={"Enter Marital Status"} onChange={update} />
+
+                                    <TextField required label="Religion" name="religion" value={data.religion} placeholder={"Enter Religion"} onChange={update} />
+                                    <TextField required label="Place Of Birth" name="placeOfBirth" value={data.placeOfBirth} placeholder={"Enter Place of birth"} onChange={update} />
+                                    <TextField required label="Permanent Home Address" name="permanentHomeAddress" placeholder={"Enter Permanent Home Address"} value={data.permanentHomeAddress} onChange={update} />
+                                    <TextField label="Fax" name="fax" placeholder={"Enter fax"} value={data.fax} onChange={update} />
+                                    <TextField label="Zip Code" name="zipCode" value={data.zipCode} onChange={update} placeholder={"Zip Code"} />
                                     <RadioGroup required label="Gender" name="gender" value={data.gender} onChange={update} options={["Male", "Female"]} />
                                 </section>
                             )}
@@ -560,12 +749,14 @@ export default function ChinaAdmissionForm() {
                                             required
                                             name="financialSponsorName"
                                             value={data.financialSponsorName}
+                                            placeholder={"Enter Financial Sponsor name"}
                                             onChange={update}
                                         />
                                         <TextField
                                             label="Address"
                                             required
                                             name="address"
+                                            placeholder={"Enter Address"}
                                             value={data.address}
                                             onChange={update}
                                         />
@@ -573,6 +764,7 @@ export default function ChinaAdmissionForm() {
                                             label="Relationship With Applicant"
                                             required
                                             name="relationshipWithApplicant"
+                                            placeholder={"Enter Relationship"}
                                             value={data.relationshipWithApplicant}
                                             onChange={update}
                                         />
@@ -580,6 +772,7 @@ export default function ChinaAdmissionForm() {
                                             label="Mobile Number"
                                             required
                                             name="mobileNumber"
+                                            placeholder={"Enter Mobile Number"}
                                             value={data.mobileNumber}
                                             onChange={update}
                                         />
@@ -590,6 +783,7 @@ export default function ChinaAdmissionForm() {
                                             label="Enter Agent"
                                             required
                                             name="agent"
+                                            placeholder={"Enter Agent"}
                                             value={data.agent}
                                             onChange={update}
                                         />
@@ -623,15 +817,21 @@ export default function ChinaAdmissionForm() {
                                         {Array.isArray(data.educationHistory) && data.educationHistory.map((edu, idx) => (
                                             <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-xl p-3">
 
-                                                <TextField label="School Attended" name={`schoolAttended-${idx}`} value={edu.schoolAttended} onChange={(n, v) => updateEducation(idx, "schoolAttended", v)} />
+                                                <TextField
+                                                    label="School Attended"
+                                                    name={`schoolAttended-${idx}`}
+                                                    value={edu.schoolAttended}
+                                                    onChange={(n, v) => updateEducation(idx, "schoolAttended", v)} placeholder={"Enter School Attended"} />
 
-                                                <TextField label="Location" name={`location-${idx}`} value={edu.location} onChange={(n, v) => updateEducation(idx, "location", v)} />
+                                                <TextField label="Location" name={`location-${idx}`} value={edu.location} onChange={(n, v) => updateEducation(idx, "location", v)} placeholder={"Enter Location"} />
 
-                                                <TextField label="Major" name={`major-${idx}`} value={edu.major} onChange={(n, v) => updateEducation(idx, "major", v)} />
+                                                <TextField label="Major" name={`major-${idx}`} value={edu.major} onChange={(n, v) => updateEducation(idx, "major", v)} placeholder={"Enter Major"} />
 
-                                                <TextField label="email" name={`attended-${idx}`} type="date" value={edu.dateAttended} onChange={(n, v) => updateEducation(idx, "dateAttended", v)} />
+                                                <TextField label="Date Attended" name={`attended-${idx}`} type="date" value={edu.dateAttended} onChange={(n, v) => updateEducation(idx, "dateAttended", v)} />
 
-                                                <TextField label="Degree Awarded" name={`degreeAwarded-${idx}`} type="text" value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} />
+                                                {/*<TextField label="Degree Awarded" name={`degreeAwarded-${idx}`} type="text" value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} />*/}
+
+                                                <SelectField required label="Degree Awarded" name={`degreeAwarded-${idx}`} value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} options={["BSc.", "Master's", "PHD."]} />
 
                                                 <div className="md:col-span-2 flex items-center gap-3">
                                                     {data.educationHistory.length > 1 && (
@@ -651,6 +851,7 @@ export default function ChinaAdmissionForm() {
                                                 label="Employer"
                                                 required
                                                 name="employer"
+                                                placeholder={"Enter Employer"}
                                                 value={data.employer}
                                                 onChange={update}
                                             />
@@ -658,6 +859,7 @@ export default function ChinaAdmissionForm() {
                                                 label="Location"
                                                 required
                                                 name="location"
+                                                placeholder={"Enter Location"}
                                                 value={data.location}
                                                 onChange={update}
                                             />
@@ -665,6 +867,7 @@ export default function ChinaAdmissionForm() {
                                                 label="Position"
                                                 required
                                                 name="position"
+                                                placeholder={"Enter Position"}
                                                 value={data.position}
                                                 onChange={update}
                                             />
@@ -687,19 +890,19 @@ export default function ChinaAdmissionForm() {
                                         {Array.isArray(data.familyMembers) && data.familyMembers.map((fam, idx) => (
                                             <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-xl p-3">
 
-                                                <TextField label="Family Member Name" name={`familyMemberName-${idx}`} value={fam.familyMemberName} onChange={(n, v) => updateFamily(idx, "familyMemberName", v)} />
+                                                <TextField label="Family Member Name" name={`familyMemberName-${idx}`} value={fam.familyMemberName} onChange={(n, v) => updateFamily(idx, "familyMemberName", v)} placeholder={"Enter Name"} />
 
-                                                <TextField label="Nationality" name={`nationality-${idx}`} value={fam.nationality} onChange={(n, v) => updateFamily(idx, "nationality", v)} />
+                                                <TextField label="Nationality" name={`nationality-${idx}`} value={fam.nationality} onChange={(n, v) => updateFamily(idx, "nationality", v)} placeholder={"Enter Nationality"} />
 
-                                                <TextField label="Mobile Number" name={`mobileNumber-${idx}`} value={fam.mobileNumber} onChange={(n, v) => updateFamily(idx, "mobileNumber", v)} />
+                                                <TextField label="Mobile Number" name={`mobileNumber-${idx}`} value={fam.mobileNumber} onChange={(n, v) => updateFamily(idx, "mobileNumber", v)} placeholder={"Enter Mobile"} />
 
-                                                <TextField label="Email" name={`email-${idx}`} type="email" value={fam.email} onChange={(n, v) => updateFamily(idx, "email", v)} />
+                                                <TextField label="Email" name={`email-${idx}`} type="email" value={fam.email} onChange={(n, v) => updateFamily(idx, "email", v)} placeholder={"Enter Email e.g example@gmail.com"} />
 
-                                                <TextField label="Profession" name={`profession-${idx}`} type="text" value={fam.profession} onChange={(n, v) => updateFamily(idx, "profession", v)} />
+                                                <TextField label="Profession" name={`profession-${idx}`} type="text" value={fam.profession} onChange={(n, v) => updateFamily(idx, "profession", v)} placeholder={"Enter Profession"} />
 
-                                                <TextField label="Work Place" name={`workPlace-${idx}`} type="text" value={fam.workPlace} onChange={(n, v) => updateFamily(idx, "workPlace", v)} />
+                                                <TextField label="Work Place" name={`workPlace-${idx}`} type="text" value={fam.workPlace} onChange={(n, v) => updateFamily(idx, "workPlace", v)} placeholder={"Enter work place"} />
 
-                                                <TextField label="Relationship" name={`relationship-${idx}`} type="text" value={fam.relationship} onChange={(n, v) => updateFamily(idx, "relationship", v)} />
+                                                <TextField label="Relationship" name={`relationship-${idx}`} type="text" value={fam.relationship} onChange={(n, v) => updateFamily(idx, "relationship", v)} placeholder={"Enter Relationship"} />
 
                                                 <div className="md:col-span-2 flex items-center gap-3">
                                                     {data.familyMembers.length > 1 && (
@@ -716,28 +919,28 @@ export default function ChinaAdmissionForm() {
                             )}
                             {step === 4 && (
                                 <section className="space-y-6">
-                                    <FileField required label="International Passport Photo (recent)" name="passportphoto" files={data.passportphoto} onFilesChange={updateFiles} accept="image/*" multiple={false} />
+                                    <FileField required label="International Passport Photo (recent)" name="passportphoto" files={data.passportphoto} onFilesChange={updateFiles} accept="image/*" multiple={true} />
 
                                     <FileField required label="Applicant Signature (Sign on paper and snap)" name="applicantSignature" files={data.applicantSignature} onFilesChange={updateFiles} accept="image/*" multiple={false} />
 
                                     <FileField required label="Sponsor's Signature (Sign on paper and snap)" name="sponsorSignature" files={data.sponsorSignature} onFilesChange={updateFiles} accept="image/*" multiple={false} />
 
-                                    <FileField label="Academic Transcripts" required name="transcripts" files={data.transcripts} onFilesChange={updateFiles} accept="image/*,application/pdf" multiple />
+                                    <FileField label="Academic Transcripts" name="transcripts" files={data.transcripts} onFilesChange={updateFiles} accept="image/*,application/pdf" multiple={true} />
 
-                                    <FileField required label="Recommendation Letters" name="recommendationLetters" files={data.recommendationLetters} onFilesChange={updateFiles} accept="image/*,application/pdf" multiple />
+                                    <FileField label="Recommendation Letters" name="recommendationLetters" files={data.recommendationLetters} onFilesChange={updateFiles} accept="image/*,application/pdf" multiple={true} />
 
-                                    <FileField required label="Medical Report (pdf format)" name="medicalReport" files={data.medicalReport} onFilesChange={updateFiles} accept="application/pdf" multiple />
+                                    <FileField label="Medical Report (pdf format)" name="medicalReport" files={data.medicalReport} onFilesChange={updateFiles} accept="application/pdf" multiple={true} />
 
-                                    <FileField required label="Bachelor/Masters Certificate (pdf format)" name="certificates" files={data.certificates} onFilesChange={updateFiles} accept="application/pdf" multiple />
+                                    <FileField label="Bachelor/Masters Certificate (pdf format)" name="certificates" files={data.certificates} onFilesChange={updateFiles} accept="application/pdf" multiple={true} />
 
-                                    <FileField required label="Bank Statement (pdf format)" name="bankStatement" files={data.bankStatement} onFilesChange={updateFiles} accept="application/pdf" multiple />
+                                    <FileField label="Bank Statement (pdf format)" name="bankStatement" files={data.bankStatement} onFilesChange={updateFiles} accept="application/pdf" multiple={true} />
 
-                                    <FileField required label="Non-Criminal Record (pdf format)" name="nonCriminalRecord" files={data.nonCriminalRecord} onFilesChange={updateFiles} accept="application/pdf" multiple />
+                                    <FileField label="Non-Criminal Record (pdf format)" name="nonCriminalRecord" files={data.nonCriminalRecord} onFilesChange={updateFiles} accept="application/pdf" multiple={true} />
 
-                                    <FileField required label="English Language Proficiency Certificate (Non-English Speaking Countries)" name="englishCertificate" files={data.englishCertificate} onFilesChange={updateFiles} accept="application/pdf" multiple />
+                                    <FileField label="English Language Proficiency Certificate (Non-English Speaking Countries)" name="englishCertificate" files={data.englishCertificate} onFilesChange={updateFiles} accept="application/pdf" multiple={true} />
 
                                     <FileField label="Research Proposal (doc format)"
-                                        accept=".pdf, .doc, .docx" name="researchProposal" files={data.researchProposal} onFilesChange={updateFiles} multiple />
+                                        accept=".pdf, .doc, .docx" name="researchProposal" files={data.researchProposal} onFilesChange={updateFiles} multiple={true} />
                                 </section>
                             )}
                             {step === 5 && (
@@ -911,13 +1114,13 @@ export default function ChinaAdmissionForm() {
                                 </section>
                             )}
                             <div className="flex items-center justify-between pt-4">
-                                <button type="button" onClick={reset} className="text-sm text-gray-600 underline">Reset form</button>
+                                <button type="button" onClick={reset} className="text-sm text-gray-600 underline cursor-pointer">Reset form</button>
                                 <div className="flex gap-3">
                                     {step > 0 && (<button type="button" onClick={back} className="rounded-2xl border px-4 py-2 text-sm font-medium hover:bg-gray-50">Back</button>)}
                                     {step < STEPS.length - 1 ? (
                                         <button type="button" onClick={next} className="rounded-2xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700">Continue</button>
                                     ) : (
-                                        <button type="submit" className="rounded-2xl bg-green-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-green-700">Submit</button>
+                                        <button type="submit" disabled={loading} className="rounded-2xl bg-green-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-green-700">{loading ? "Submitting...." : "Submit"}</button>
                                     )}
                                 </div>
                             </div>
@@ -943,6 +1146,6 @@ function ReviewFiles({ label, files = [] }) {
 }
 
 function labelFor(field) {
-    const labels = { majorFirstChoice: "Major First Choice", firstName: "First Name", surName: " Surname", email: "Email", phone: "Phone", nationality: "Nationality", dob: "Date of Birth", gender: "Gender", passportNumber: "Passport Number", passportExpiryDate: "Passport Expiry Date", hasChinaVisa: "China Visa", visaType: "Visa Type", visaExpiry: "Visa Expiry", highestQualification: "Highest Qualification", englishProficiency: "English Proficiency", hskLevel: "HSK Level", intendedCity: "Preferred City", programType: "Program Type", major: "Intended Major", photo: "Passport Photo", passportScan: "Passport Scan", transcripts: "Transcripts", recommendationLetters: "Recommendation Letters" };
+    const labels = { majorFirstChoice: "Major First Choice", firstName: "First Name", surName: " Surname", email: "Email", phone: "Phone", nationality: "Nationality", dob: "Date of Birth", gender: "Gender", passportNumber: "Passport Number", passportExpiryDate: "Passport Expiry Date", englishProficiency: "English Proficiency", intendedCity: "Preferred City", programType: "Program Type", major: "Intended Major", passportphoto: "Passport Photo", transcripts: "Transcripts", recommendationLetters: "Recommendation Letters" };
     return labels[field] || field;
 }

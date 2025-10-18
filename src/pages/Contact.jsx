@@ -1,27 +1,91 @@
-import React from "react";
+import { useState } from "react";
 import Breadcrum from "../layouts/Breadcrum";
 import ApplyNow from "../layouts/ApplyNow";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Navigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
+import AboutImage from "../assets/images/4image.jpg";
 
 
 const Contact = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [messageContent, setMessageContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  // Check if token is available
   const { token } = useStateContext();
   if (!token) {
-    toast.error("Login to have Access!", {
-      id: "contact",
-    });
     return <Navigate to="/login" />
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !subject || !messageContent) {
+      toast.error("All fields are Required!")
+      return;
+    }
+
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      toast.error("Please enter a valid email address!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('subject', subject);
+    formData.append('messageContent', messageContent);
+
+    setLoading(true);
+    try {
+      await fetch(`${import.meta.env.VITE_BASE_URL}/user/contact-us/send-message`, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("ACCESS_TOKEN")}`, // if you need a token
+        },
+        body: formData
+      }).then(async (res) => {
+        if (!res.ok) {
+          if (res.status === 401) {
+            toast.error("You are not authorized. Please login to continue.")
+            localStorage.removeItem("ACCESS_TOKEN");
+            return;
+          } else {
+            const data = await res.json();
+            toast.error(data.message);
+            return;
+          }
+        }
+        const data = await res.json();
+        if (data.success) {
+          toast.success(data.message || "Sent Successfully!")
+          setName("");
+          setEmail("");
+          setSubject("");
+          setMessageContent("");
+          return;
+        } else {
+          toast.error("Something went Wrong!")
+        }
+      }).then((err) => {
+        console.log(err.message);
+        return;
+      }).finally(() => { setLoading(false); return; })
+    } catch (error) {
+      error.message;
+      // console.log(error.message);
+    }
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
     <div>
-      <Breadcrum heading={`Contact Us`} page_title={`Contact Us`} />
+      <Breadcrum heading={`Contact Us`} page_title={`Contact Us`} imagePath={AboutImage} />
       <section className="w-full">
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 ">
           {/* Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 py-3">
@@ -55,12 +119,14 @@ const Contact = () => {
           <div className="flex justify-center items-stretch">
             <div className="w-full md:w-8/12 p-4 md:p-8 order-last md:order-last rounded-xl shadow-xl">
               <div className="py-4 text-2xl font-bold">Contact Us</div>
-              <form method="POST" action="/contact_store" className="mt-5">
+              <form onSubmit={handleSubmit} className="mt-5">
                 {/* Name Input */}
                 <div className="mb-4">
                   <input
                     type="text"
-                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
                     placeholder="Your Name"
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1"
                   />
@@ -70,7 +136,9 @@ const Contact = () => {
                 <div className="mb-4">
                   <input
                     type="email"
-                    name="email"
+                    value={email}
+                    required
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your Email"
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1"
                   />
@@ -80,7 +148,9 @@ const Contact = () => {
                 <div className="mb-4">
                   <input
                     type="text"
-                    name="subject"
+                    value={subject}
+                    required
+                    onChange={(e) => setSubject(e.target.value)}
                     placeholder="Subject"
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1"
                   />
@@ -89,8 +159,10 @@ const Contact = () => {
                 {/* Message Textarea */}
                 <div className="mb-4">
                   <textarea
-                    name="message"
-                    placeholder="Message"
+                    value={messageContent}
+                    onChange={(e) => setMessageContent(e.target.value)}
+                    placeholder="Enter Message Here"
+                    required
                     rows="7"
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1"
                   ></textarea>
@@ -100,9 +172,10 @@ const Contact = () => {
                 <div className="mb-4">
                   <button
                     type="submit"
-                    className="w-full py-3 px-5 border border-[#0061a1] text-[#0061a1] rounded-lg hover:bg-[#0061a1] hover:text-white text-xl transition-all duration-500 ease-in-out"
+                    disabled={loading}
+                    className="w-full py-3 px-5 border border-[#0061a1] text-[#0061a1] rounded-lg hover:bg-[#0061a1] hover:text-white text-xl transition-all cursor-pointer duration-500 ease-in-out"
                   >
-                    Send Message
+                    {loading ? "Sending..." : "Send Message"}
                   </button>
                 </div>
               </form>

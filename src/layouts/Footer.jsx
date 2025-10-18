@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 const Footer = () => {
 
   const options = {
-    duration: 3000,
+    duration: 10000,
     style: { background: "#0061a1", color: "#fff" }
   }
   return (
-    <section className="bg-[#0061a1] text-white flex flex-col items-center mx-auto">
+    <section className="bg-[#045c97] text-white flex flex-col items-center mx-auto">
       <footer className="text-gray-200 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Grid Layout */}
@@ -58,13 +58,13 @@ const Footer = () => {
               <h3 className="text-2xl lg:text-2xl md:text-2xl sm:text-2xl font-semibold text-white mb-4">Company</h3>
               <ul className="space-y-2 text-lg mb-4">
                 <li>
-                  <Link to="/#home" className="hover:text-white transition">Home</Link>
+                  <Link to="/home" className="hover:text-white transition">Home</Link>
                 </li>
                 <li>
-                  <Link to="/#about" className="hover:text-white transition">About</Link>
+                  <Link to="/about" className="hover:text-white transition">About</Link>
                 </li>
                 <li>
-                  <Link to="/#contact" className="hover:text-white transition">Contact</Link>
+                  <Link to="/contact" className="hover:text-white transition">Contact</Link>
                 </li>
               </ul>
               <div className="mb-5 mt-5">
@@ -120,7 +120,7 @@ const Footer = () => {
           </div>
         </div>
       </footer>
-      <Toaster position="top-right" autoClose={3000} toastOptions={options} />
+      <Toaster position="top-right" autoClose={10000} toastOptions={options} />
     </section>
   )
 }

@@ -1,13 +1,13 @@
 
-const Breadcrum = ({ heading, page_title }) => {
 
+const Breadcrum = ({ heading, page_title, imagePath }) => {
   const style = {
     backgroundImage:
-      "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=80')",
+      `url(${imagePath})`,
   }
 
   return (
-    <section className="relative w-full h-fit mx-auto">
+    <section className="relative w-full h-fit mx-auto mt-16">
       <div className="max-w-6xl px-4 mx-auto py-32 flex items-center justify-center">
         {/* Background Image */}
         <div className="absolute inset-0 bg-cover bg-center"

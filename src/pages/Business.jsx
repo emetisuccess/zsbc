@@ -1,12 +1,16 @@
 import React from 'react'
 import Breadcrum from "../layouts/Breadcrum";
 import ApplyNow from "../layouts/ApplyNow";
-import AboutImage from "../assets/images/about.jpg";
+import AboutImage from "../assets/images/3image.jpg";
+import Logo from "../assets/logos/zsbc_icon.png"
 
 const Business = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+
   return (
     <div>
-      <Breadcrum heading={`Business Consultation`} page_title={`Business Consultation`} />
+      <Breadcrum heading={`Business Consultation`} page_title={`Business Consultation`} imagePath={AboutImage} />
       <section className="relative w-full h-fit flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center">
           {/* Content */}
@@ -21,7 +25,7 @@ const Business = () => {
               </p>
             </div>
             {/* Video */}
-            <div className="w-full h-96 object-center" style={{
+            <div className="w-full h-96 object-center hidden md:block" style={{
               backgroundImage: `url(${AboutImage})`, backgroundPosition: "center", height: "500px", objectFit: "fill", backgroundSize: "contain", backgroundRepeat: "no-repeat"
             }}>
             </div>

@@ -8,7 +8,10 @@ import {
   LogOut,
 } from "lucide-react";
 import { useStateContext } from "../contexts/ContextProvider";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
+
+
+
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
@@ -19,14 +22,14 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 pt-17">
       {/* Sidebar */}
       <div
         className={`fixed md:static z-20 inset-y-0 left-0 transform ${open ? "translate-x-0" : "-translate-x-full"
           } md:translate-x-0 transition duration-200 ease-in-out w-64 bg-white shadow-lg`}
       >
         <div className="flex items-center justify-between p-4 border-b">
-          <h1 className="text-xl font-bold text-[#0061a1]">MyDashboard</h1>
+          <h1 className="text-xl font-bold text-[#0061a1]">Dashboard</h1>
           <button
             className="md:hidden"
             onClick={() => setOpen(false)}
@@ -50,7 +53,7 @@ const Dashboard = () => {
             <span>Analytics</span>
           </a>
           <a
-            href="#"
+            href="#list-application"
             className="flex items-center space-x-2 p-2 rounded-lg hover:bg-blue-100"
           >
             <Users className="w-5 h-5" />
@@ -74,8 +77,8 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Topbar */}
-        <header className="flex items-center justify-between p-4 bg-white shadow-md">
+        {/* Topbar 
+        <header className="flex items-center justify-between p-4 bg-[#0061a1] shadow-md">
           <button
             className="md:hidden"
             onClick={() => setOpen(true)}
@@ -83,14 +86,18 @@ const Dashboard = () => {
             <Menu className="w-6 h-6" />
           </button>
           <h2 className="text-lg font-semibold">Dashboard</h2>
-          <div className="w-10 h-10 rounded-full bg-[#0061a1] text-white flex items-center justify-center">
-            U
+          <div className="flex items-center justify-center p-1 font-bold uppercase">
+            {user !== null ? user.firstname + " " + user.lastname : ""}
+            {user !== null && (
+              <img src={user.avatar} className="ml-2" alt='Profile Image' width={40} />
+            )}
           </div>
-        </header>
+        </header>*/}
 
         {/* Content Area */}
         <main className="p-6 overflow-y-auto">
-          <h3 className="text-xl font-bold mb-4">Welcome back 👋</h3>
+          <h3 className="text-xl font-bold mb-4">Welcome back {user !== null ? user.firstname + " " + "👋" : "👋"} </h3>
+          {console.log()}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-4 shadow rounded-lg">
               <h4 className="font-semibold">Card 1</h4>

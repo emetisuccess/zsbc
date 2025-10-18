@@ -7,34 +7,46 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 import "@splidejs/react-splide/css";
 import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import Logo from "../assets/logos/zsbc_icon.png"
+
 
 const Home = () => {
+
+  const [loading, setLoading] = useState(true); // loading state
+  const [majors, setMajors] = useState([]);
+
+  const effectRan = useRef(false); // 👈 keep track
+
+  useEffect(() => {
+    // setLoading(true)
+    if (effectRan.current === false) {
+      fetch(`${import.meta.env.VITE_BASE_URL}/user/majors`)
+        .then((res) => {
+          if (!res.ok) {
+            res.json();
+            setLoading(true)
+            // console.log(d.message);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setMajors(data.data); // 👈 only the majors array
+        })
+        .catch(error => {
+          error.message;
+          // console.log(error.message)
+        }).finally(setLoading(false));
+      effectRan.current = true; // 👈 mark as run
+    }
+  }, []);
+
+  // console.log(majors);
 
   const style = {
     backgroundImage:
       "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=80')",
   }
-
-  const slides = [
-    {
-      id: 1,
-      title: "Beautiful Landscape",
-      description: "Experience the serene view of nature at its best.",
-      img: "https://picsum.photos/600/400?random=1",
-    },
-    {
-      id: 2,
-      title: "City Life",
-      description: "Feel the vibrant energy of modern cities.",
-      img: "https://picsum.photos/600/400?random=2",
-    },
-    {
-      id: 3,
-      title: "Mountain Escape",
-      description: "Find peace in the majestic mountains.",
-      img: "https://picsum.photos/600/400?random=3",
-    },
-  ];
 
   const options = {
     type: 'loop',
@@ -59,33 +71,14 @@ const Home = () => {
     },
   }
 
-  const cards = [
-    {
-      id: 1,
-      title: "Card One",
-      image: "https://picsum.photos/600/400?random=1",
-      description: "Find peace in the majestic mountains.",
-    },
-    {
-      id: 2,
-      title: "Card Two",
-      image: "https://picsum.photos/600/400?random=2",
-      description: "Find peace in the majestic mountains.",
-    },
-    {
-      id: 3,
-      title: "Card Three",
-      image: "https://picsum.photos/600/400?random=3",
-      description: "Find peace in the majestic mountains.",
-    },
-    {
-      id: 4,
-      title: "Card Four",
-      image: "https://picsum.photos/600/400?random=3",
-      description: "Find peace in the majestic mountains.",
-    },
-  ];
-
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={Logo} alt="Loading..." className="w-32 h-32 animate-ping" />
+      </div>
+    );
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
   return (
     <div className="w-full mx-auto">
       <Hero />
@@ -157,20 +150,20 @@ const Home = () => {
         {/* Splide Carousel */}
         <div className="max-w-6xl mx-auto px-4">
           <Splide options={options} extensions={{ AutoScroll }}>
-            {slides.map((slide) => (
-              <SplideSlide key={slide.id}>
+            {majors.map((major) => (major.trending == 1 && (
+              <SplideSlide key={major.id}>
                 <div className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
                   <img
-                    src={slide.img}
-                    alt={slide.title}
+                    src={major.image}
+                    alt={major.name}
                     className="w-full h-full object-cover"
                   />
                   {/* Description overlay */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                    <h3 className="text-lg font-semibold text-white">
-                      {slide.title}q
+                    <h3 className="text-2xl font-bold text-white">
+                      {major.name}
                     </h3>
-                    <p className="text-sm text-gray-200">{slide.description}</p>
+                    <p className="text-sm text-gray-200">{major.short_desc}</p>
                     <Link to='/apply'>
                       <button className="px-6 py-2 bg-[#0061a1] text-white rounded-lg hover:bg-blue-800 cursor-pointer transition duration-300 ease-in-out hover:scale-110 mt-2">
                         Apply
@@ -178,7 +171,7 @@ const Home = () => {
                     </Link>
                   </div>
                 </div>
-              </SplideSlide>
+              </SplideSlide>)
             ))}
           </Splide>
         </div>
@@ -197,19 +190,19 @@ const Home = () => {
 
           {/* Right Side Cards */}
           <div className="grid sm:grid-cols-3 gap-6">
-            {cards.map((card) => (
-              <div key={card.id} className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
+            {majors.slice(0, 6).map((major) => (
+              <div key={major.id} className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
                 <img
-                  src={card.image}
-                  alt={card.title}
+                  src={major.image}
+                  alt={major.name}
                   className="w-full h-full object-cover"
                 />
                 {/* Description overlay */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                  <h3 className="text-lg font-semibold text-white">
-                    {card.title}
+                  <h3 className="text-lg font-bold text-white">
+                    {major.name}
                   </h3>
-                  <p className="text-sm text-gray-200">{card.description}</p>
+
                   <Link to='/apply'>
                     <button className="px-6 py-2 bg-[#0061a1] text-white rounded-lg hover:bg-blue-800 cursor-pointer transition duration-300 ease-in-out hover:scale-110 mt-2">
                       Apply

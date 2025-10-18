@@ -1,42 +1,92 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useStateContext } from "../../contexts/ContextProvider"
-import { Navigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import axiosClient from "../../axios-client";
-import { Link } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUser, setToken } = useStateContext();
-
-
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const { token } = useStateContext();
+
+
   if (token) {
     return <Navigate to="/" />
   }
 
-  const payload = {
-    email: email,
-    password: password
+  const handleGoogleCallback = async (e) => {
+    e.preventDefault();
+
+    setGoogleLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/auth-google`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.message || `Request failed (${res.status})`);
+      }
+      const data = await res.json();
+      if (data) {
+        console.log(data);
+        window.location.href = data.url; // redirect to Google login
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setGoogleLoading(false)
+    }
   }
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!email || !password) {
       toast.error("All fields are Required")
     } else {
-      axiosClient.post("/auth/login", payload
-      ).then((response) => {
-        toast.success("Logged in Successfully!");
-        setToken(response.data.data.access_token);
-        setUser(response.data.data.user);
-      }).catch((err) => {
-        // toast.error("Something went Wrong!");
-        toast.error("Work still in Progress!");
-      });
+
+      if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        toast.error("Please enter a valid email address!");
+        return;
+      }
+      setLoading(true);
+      try {
+
+        const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => null);
+          throw new Error(data?.message || `Request failed (${res.status})`);
+        }
+
+        const data = await res.json();
+        const token = data.token
+        if (token) {
+          setToken(token);
+          setUser(data.user);
+          toast.success(data.message);
+        } else {
+          toast.error("User is Unauthorized!");
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoading(false);
+      }
+
     }
   }
 
@@ -69,10 +119,11 @@ const Login = () => {
           </div>
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-[#0061a1] text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition cursor-pointer"
-          >Login</button>
+          >{loading ? "Logging in..." : "Login"}</button>
           <div className="m-0 text-sm">Forgot Password?&nbsp;
-            <Link to='' className="underline text-[#0061a1] font-semibold">Reset</Link>
+            <Link to='/forgot-password' className="underline text-[#0061a1] font-semibold">Reset</Link>
           </div>
           <div className="m-0 text-sm">Don't have an Account?&nbsp;
             <Link to='/register' className="underline text-[#0061a1] font-semibold">Register</Link>
@@ -88,14 +139,14 @@ const Login = () => {
 
         {/* Google Login Button */}
         <button
-          className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition"
+          className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition cursor-pointer" onClick={handleGoogleCallback}
         >
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
             alt="Google"
             className="w-5 h-5"
           />
-          <span className="font-medium text-gray-700">Continue with Google</span>
+          <span className="font-medium text-gray-700">{googleLoading ? "Processing google auth..." : "Continue with Google"}</span>
         </button>
       </div>
     </div>
