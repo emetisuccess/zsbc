@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react"; // icon library
+import { Eye, EyeOff } from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { Link } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 
 const Register = () => {
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [firstname, setFirstname] = useState("");
@@ -98,7 +97,8 @@ const Register = () => {
           setEmail("");
           setConfirmPassword("");
           setTimeout(() => {
-            window.location.href = "/verify-code"
+            return <Navigate to="/verify-code" />
+            // window.location.href = "/verify-code"
           }, 4000);
         } else {
           toast.error("User Registration Failed!");

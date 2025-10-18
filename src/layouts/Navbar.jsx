@@ -117,12 +117,12 @@ const Navbar = () => {
                   <div className="absolute right-0 mt-3 bg-white text-[#0061a1] rounded-lg shadow-lg w-48 z-50 pt-3 pb-1">
                     {token ? (
                       <>
-                        <Link
+                        {/*<Link
                           to="/dashboard"
                           className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
                         >
                           Dashboard
-                        </Link>
+                        </Link>*/}
                         <button onClick={() => {
                           onLogout();
                           setUserMenuOpen(false);

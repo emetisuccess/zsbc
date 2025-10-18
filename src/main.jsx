@@ -22,7 +22,6 @@ import VerifyCode from "./pages/Auth/VerifyCode.jsx";
 import ResetPassword from "./pages/Auth/ResetPassword.jsx";
 import VerifyResetPasswordOtp from "./pages/Auth/VerifyResetPasswordOtp.jsx"
 import GoogleSuccess from "./pages/Auth/GoogleSuccess.jsx";
-import List from "./pages/dashboard/application/List.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -48,7 +47,6 @@ createRoot(document.getElementById('root')).render(
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/register" element={<Register />} />
           <Route path="/google-success" element={<GoogleSuccess />} />
-          <Route path="/list-application" element={<List />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
