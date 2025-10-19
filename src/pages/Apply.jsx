@@ -87,7 +87,6 @@ const requiredFieldsByStep = {
     0: ["majorFirstChoice",
         "surName",
         "firstName",
-        "middleName",
         "email",
         "phone",
         "gender",
@@ -114,11 +113,8 @@ const requiredFieldsByStep = {
         "agent",
         "sponsorComment",
         "signedDate"],
-    2: ["educationHistory",
-        "employer",
-        "location",
-        "position",
-        "dateStarted",
+    2: [
+        "educationHistory"
     ],
     3: [
         "familyMembers"
@@ -190,14 +186,14 @@ function StepIndicator({ currentStep }) {
             <div className="flex items-center justify-between mb-2">
                 {STEPS.map((label, idx) => (
                     <div key={label} className="flex-1 text-center">
-                        <div className={classNames("text-xs sm:text-sm font-medium truncate", idx === currentStep ? "text-blue-600" : "text-gray-500")} title={label}>
+                        <div className={classNames("text-xs sm:text-sm font-medium truncate", idx === currentStep ? "text-[#0061a1]" : "text-gray-500")} title={label}>
                             {label}
                         </div>
                     </div>
                 ))}
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
+                <div className="bg-[#0061a1] h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
             </div>
         </div>
     );
@@ -340,7 +336,7 @@ export default function ChinaAdmissionForm() {
     if (!token) {
         return <Navigate to="/login" />
     }
-
+    const hasPhd = data.educationHistory.some(e => e.degreeAwarded === "PHD");
     const updateEducation = (index, field, value) => {
         setData((prev) => {
             const next = Array.isArray(prev.educationHistory) ? [...prev.educationHistory] : [];
@@ -674,7 +670,9 @@ export default function ChinaAdmissionForm() {
             <div className="min-h-screen bg-gray-50 py-10">
                 <Toaster position="top-right" autoClose={3000} toastOptions={options} />
                 <div className="mx-auto max-w-6xl px-4">
-                    <div className="mb-8 text-center"><h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admission Application – Study in China</h1><p className="text-gray-600 mt-2">Complete the steps below. Your progress is saved locally in your browser.</p></div>
+                    <div className="mb-8 text-center"><h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admission Application – Study in China</h1>
+                        <small className="text-red-600 font-semibold underline text-md">Fill your information as it is on your passport datapage. Thanks.</small>
+                        <p className="text-gray-600 mt-2">Complete the steps below. Your progress is saved locally in your browser.</p></div>
                     <div className="bg-white rounded-2xl shadow-sm border p-6 md:p-8">
                         <StepIndicator currentStep={step} />
                         <ErrorBanner errors={errors} />
@@ -690,7 +688,7 @@ export default function ChinaAdmissionForm() {
                                     <TextField required label="Surname" name="surName" value={data.surName} onChange={update} placeholder={"Enter Surname"} />
 
                                     <TextField required label="First Name" name="firstName" value={data.firstName} onChange={update} placeholder={"Enter Firstname"} />
-                                    <TextField required label="Middle Name" name="middleName" value={data.middleName} onChange={update} placeholder={"Enter Middlename"} />
+                                    <TextField label="Middle Name" name="middleName" value={data.middleName} onChange={update} placeholder={"Enter Middlename"} />
                                     <TextField required label="Email" name="email" type="email" value={data.email} onChange={update} placeholder={"Enter email e.g example@gmail.com"} />
                                     <TextField required label="Phone" name="phone" value={data.phone} onChange={update} placeholder="+234 800 000 0000" />
 
@@ -700,7 +698,7 @@ export default function ChinaAdmissionForm() {
 
                                     <TextField label="Chinese Name" name="chineseName" value={data.chineseName} onChange={update} placeholder={"Enter Chinese name if any"} />
                                     <TextField required label="Native Language" name="nativeLanguage" placeholder={"Enter native language"} value={data.nativeLanguage} onChange={update} />
-                                    <TextField required label="Passport Number" name="passportNumber" placeholder="Enter a valid Passport Number" value={data.passportNumber} onChange={update} />
+                                    <TextField required label="Passport Number" name="passportNumber" placeholder="Enter valid Passport Number" value={data.passportNumber} onChange={update} />
                                     <TextField required label="Passport Expiry Date" name="passportExpiryDate" type="date" value={data.passportExpiryDate} onChange={update} />
                                     <TextField required label="Marital Status" name="maritalStatus" value={data.maritalStatus} placeholder={"Enter Marital Status"} onChange={update} />
 
@@ -723,7 +721,7 @@ export default function ChinaAdmissionForm() {
 
                                         <TextField required label="Field of Study" name="fieldOfStudy" value={data.fieldOfStudy} onChange={update} placeholder="e.g. Medicine" />
                                     </section>
-                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Duration of Study</p>
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-[#0061a1] mt-16 mb-2">Duration of Study</p>
                                     <div className="grid md:grid-cols-2 gap-2">
                                         <TextField
                                             type="date"
@@ -742,7 +740,7 @@ export default function ChinaAdmissionForm() {
                                             onChange={update}
                                         />
                                     </div>
-                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Financial Sponsors</p>
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-[#0061a1] mt-16 mb-2">Financial Sponsors</p>
                                     <div className="grid md:grid-cols-2 gap-2">
                                         <TextField
                                             label="Financial Sponsor Name"
@@ -777,7 +775,7 @@ export default function ChinaAdmissionForm() {
                                             onChange={update}
                                         />
                                     </div>
-                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Person or Agency to Action on your behalf in China</p>
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-[#0061a1] mt-16 mb-2">Person or Agency to Action on your behalf in China</p>
                                     <div className="grid md:grid-cols-1 gap-2">
                                         <TextField
                                             label="Enter Agent"
@@ -788,7 +786,7 @@ export default function ChinaAdmissionForm() {
                                             onChange={update}
                                         />
                                     </div>
-                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Comment of Sponsor or Recommended Party</p>
+                                    <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-[#0061a1] mt-16 mb-2">Comment of Sponsor or Recommended Party</p>
                                     <div className="grid md:grid-cols-1 gap-2">
 
                                         <TextArea label="Enter Comment"
@@ -816,36 +814,37 @@ export default function ChinaAdmissionForm() {
                                         <h3 className="text-md font-semibold">Education Background</h3>
                                         {Array.isArray(data.educationHistory) && data.educationHistory.map((edu, idx) => (
                                             <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-xl p-3">
-
                                                 <TextField
                                                     label="School Attended"
                                                     name={`schoolAttended-${idx}`}
                                                     value={edu.schoolAttended}
+                                                    required
                                                     onChange={(n, v) => updateEducation(idx, "schoolAttended", v)} placeholder={"Enter School Attended"} />
 
-                                                <TextField label="Location" name={`location-${idx}`} value={edu.location} onChange={(n, v) => updateEducation(idx, "location", v)} placeholder={"Enter Location"} />
+                                                <TextField label="Location" name={`location-${idx}`} value={edu.location} required onChange={(n, v) => updateEducation(idx, "location", v)} placeholder={"Enter Location"} />
 
-                                                <TextField label="Major" name={`major-${idx}`} value={edu.major} onChange={(n, v) => updateEducation(idx, "major", v)} placeholder={"Enter Major"} />
+                                                <TextField label="Major" name={`major-${idx}`} value={edu.major} required onChange={(n, v) => updateEducation(idx, "major", v)} placeholder={"Enter Major"} />
 
-                                                <TextField label="Date Attended" name={`attended-${idx}`} type="date" value={edu.dateAttended} onChange={(n, v) => updateEducation(idx, "dateAttended", v)} />
+                                                <TextField label="Date Attended" name={`attended-${idx}`} required type="date" value={edu.dateAttended} onChange={(n, v) => updateEducation(idx, "dateAttended", v)} />
 
                                                 {/*<TextField label="Degree Awarded" name={`degreeAwarded-${idx}`} type="text" value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} />*/}
 
-                                                <SelectField required label="Degree Awarded" name={`degreeAwarded-${idx}`} value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} options={["BSc.", "Master's", "PHD."]} />
+
+                                                <SelectField required label="Degree Awarded" name={`degreeAwarded-${idx}`} value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} options={["BSc.", "Master's", "PHD"]} />
 
                                                 <div className="md:col-span-2 flex items-center gap-3">
                                                     {data.educationHistory.length > 1 && (
                                                         <button type="button" onClick={() => removeEducation(idx)} className="rounded-2xl border px-3 py-2 text-sm">Remove</button>
                                                     )}
                                                     {idx === data.educationHistory.length - 1 && (
-                                                        <button type="button" onClick={addEducation} className="rounded-2xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Add another</button>
+                                                        <button type="button" onClick={addEducation} className="rounded-2xl bg-[#0061a1] px-3 py-2 text-sm font-semibold text-white">Add another</button>
                                                     )}
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="space-y-6">
-                                        <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-indigo-900 mt-16 mb-2">Work Experience</p>
+                                    {hasPhd && <div className="space-y-6">
+                                        <p className="border border-l-8 py-0.5 w-6/12 px-2 border-l-[#0061a1] mt-16 mb-2">Work Experience</p>
                                         <div className="grid md:grid-cols-2 gap-2">
                                             <TextField
                                                 label="Employer"
@@ -880,7 +879,7 @@ export default function ChinaAdmissionForm() {
                                                 onChange={update}
                                             />
                                         </div>
-                                    </div>
+                                    </div>}
                                 </section>
                             )}
                             {step === 3 && (
@@ -890,19 +889,19 @@ export default function ChinaAdmissionForm() {
                                         {Array.isArray(data.familyMembers) && data.familyMembers.map((fam, idx) => (
                                             <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-xl p-3">
 
-                                                <TextField label="Family Member Name" name={`familyMemberName-${idx}`} value={fam.familyMemberName} onChange={(n, v) => updateFamily(idx, "familyMemberName", v)} placeholder={"Enter Name"} />
+                                                <TextField label="Family Member Name" required name={`familyMemberName-${idx}`} value={fam.familyMemberName} onChange={(n, v) => updateFamily(idx, "familyMemberName", v)} placeholder={"Enter Name"} />
 
-                                                <TextField label="Nationality" name={`nationality-${idx}`} value={fam.nationality} onChange={(n, v) => updateFamily(idx, "nationality", v)} placeholder={"Enter Nationality"} />
+                                                <TextField label="Nationality" required name={`nationality-${idx}`} value={fam.nationality} onChange={(n, v) => updateFamily(idx, "nationality", v)} placeholder={"Enter Nationality"} />
 
-                                                <TextField label="Mobile Number" name={`mobileNumber-${idx}`} value={fam.mobileNumber} onChange={(n, v) => updateFamily(idx, "mobileNumber", v)} placeholder={"Enter Mobile"} />
+                                                <TextField label="Mobile Number" required name={`mobileNumber-${idx}`} value={fam.mobileNumber} onChange={(n, v) => updateFamily(idx, "mobileNumber", v)} type="tel" placeholder={"Enter Mobile"} />
 
-                                                <TextField label="Email" name={`email-${idx}`} type="email" value={fam.email} onChange={(n, v) => updateFamily(idx, "email", v)} placeholder={"Enter Email e.g example@gmail.com"} />
+                                                <TextField label="Email" required name={`email-${idx}`} type="email" value={fam.email} onChange={(n, v) => updateFamily(idx, "email", v)} placeholder={"Enter Email e.g example@gmail.com"} />
 
-                                                <TextField label="Profession" name={`profession-${idx}`} type="text" value={fam.profession} onChange={(n, v) => updateFamily(idx, "profession", v)} placeholder={"Enter Profession"} />
+                                                <TextField label="Profession" required name={`profession-${idx}`} type="text" value={fam.profession} onChange={(n, v) => updateFamily(idx, "profession", v)} placeholder={"Enter Profession"} />
 
-                                                <TextField label="Work Place" name={`workPlace-${idx}`} type="text" value={fam.workPlace} onChange={(n, v) => updateFamily(idx, "workPlace", v)} placeholder={"Enter work place"} />
+                                                <TextField label="Work Place" required name={`workPlace-${idx}`} type="text" value={fam.workPlace} onChange={(n, v) => updateFamily(idx, "workPlace", v)} placeholder={"Enter work place"} />
 
-                                                <TextField label="Relationship" name={`relationship-${idx}`} type="text" value={fam.relationship} onChange={(n, v) => updateFamily(idx, "relationship", v)} placeholder={"Enter Relationship"} />
+                                                <TextField label="Relationship" required name={`relationship-${idx}`} type="text" value={fam.relationship} onChange={(n, v) => updateFamily(idx, "relationship", v)} placeholder={"Enter Relationship"} />
 
                                                 <div className="md:col-span-2 flex items-center gap-3">
                                                     {data.familyMembers.length > 1 && (
@@ -1118,7 +1117,7 @@ export default function ChinaAdmissionForm() {
                                 <div className="flex gap-3">
                                     {step > 0 && (<button type="button" onClick={back} className="rounded-2xl border px-4 py-2 text-sm font-medium hover:bg-gray-50">Back</button>)}
                                     {step < STEPS.length - 1 ? (
-                                        <button type="button" onClick={next} className="rounded-2xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700">Continue</button>
+                                        <button type="button" onClick={next} className="rounded-2xl bg-[#0061a1] px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700">Continue</button>
                                     ) : (
                                         <button type="submit" disabled={loading} className="rounded-2xl bg-green-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-green-700">{loading ? "Submitting...." : "Submit"}</button>
                                     )}
