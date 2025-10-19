@@ -182,24 +182,28 @@ const Navbar = () => {
                     <Link
                       to="/admission"
                       className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                      onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
                       Admission Processing
                     </Link>
                     <Link
                       to="/business"
                       className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                      onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
                       Business Consultation
                     </Link>
                     <Link
                       to="/goods"
                       className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                      onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
                       Import & Export of Goods
                     </Link>
                     <Link
                       to="/translation"
                       className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                      onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
                       Translation
                     </Link>
@@ -225,6 +229,7 @@ const Navbar = () => {
                         {/*<Link
                           to="/dashboard"
                           className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
                           Dashboard
                         </Link>*/}
@@ -241,12 +246,14 @@ const Navbar = () => {
                         <Link
                           to="/register"
                           className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
                           Register
                         </Link>
                         <Link
                           to="/login"
                           className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
                           Login
                         </Link>
