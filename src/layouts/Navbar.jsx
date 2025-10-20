@@ -65,12 +65,14 @@ const Navbar = () => {
                     <Link
                       to="/admission"
                       className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                      onClick={() => setServiceMenuOpen(!serviceMenuOpen)}
                     >
                       Admission Processing
                     </Link>
                     <Link
                       to="/business"
                       className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                      onClick={() => setServiceMenuOpen(!serviceMenuOpen)}
                     >
                       Business Consultation
                     </Link>
@@ -78,12 +80,14 @@ const Navbar = () => {
                     <Link
                       to="/goods"
                       className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                      onClick={() => setServiceMenuOpen(!serviceMenuOpen)}
                     >
                       Import & Export of Goods
                     </Link>
                     <Link
                       to="/translation"
                       className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                      onClick={() => setServiceMenuOpen(!serviceMenuOpen)}
                     >
                       Translation
                     </Link>
@@ -136,12 +140,14 @@ const Navbar = () => {
                         <Link
                           to="/register"
                           className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                          onClick={() => setUserMenuOpen(!userMenuOpen)}
                         >
                           Register
                         </Link>
                         <Link
                           to="/login"
                           className="block px-4 py-2 hover:bg-[#0061a1] hover:text-white"
+                          onClick={() => setUserMenuOpen(!userMenuOpen)}
                         >
                           Login
                         </Link>

@@ -53,7 +53,7 @@ const Hero = () => {
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                 <div className="text-center text-white px-6">
-                  <h1 className="text-5xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+                  <h1 className="text-5xl max-w-6xl md:text-6xl font-bold mb-4 drop-shadow-lg">
                     {slide.title}
                   </h1>
                   <p className="text-lg md:text-2xl mb-6 drop-shadow-md">
