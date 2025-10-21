@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { Navigate, Link } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,6 +13,11 @@ const Register = () => {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [countryInfo, setCountryInfo] = useState({
+    name: "",
+    dialCode: "",
+    countryCode: "",
+  });
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,7 +54,10 @@ const Register = () => {
     }
   }
 
-
+  const handlePhoneChange = (value, country) => {
+    setPhoneNumber(value);
+    setCountryInfo(country);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -75,8 +85,12 @@ const Register = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            firstname, lastname,
-            email, password, phoneNumber
+            firstname,
+            lastname,
+            email,
+            password,
+            phoneNumber,
+            countryInfo
           }),
         });
 
@@ -88,11 +102,13 @@ const Register = () => {
           // throw new Error(data?.message || `Request failed (${res.status})`);
         }
         const data = await res.json();
-        const token = data.token;
         if (data.success) {
-          setToken(token);
+          setToken(data.token);
           setUser(data.user);
           toast.success(data.message);
+          setFirstname("");
+          setLastname("");
+          setEmail("");
           setPassword("");
           setEmail("");
           setConfirmPassword("");
@@ -158,18 +174,26 @@ const Register = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              placeholder="Enter your Phone Number"
+          {/* Phone Number */}
+          <div className="mb-4">
+            <label className="block text-gray-600 mb-2">Phone Number</label>
+            <PhoneInput
+              country={"cn"}
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+              onChange={handlePhoneChange}
+              inputStyle={{
+                width: "100%",
+                height: "45px",
+                borderRadius: "8px",
+              }}
+              containerClass="border border-gray-300 rounded-md"
+              buttonStyle={{
+                borderTopLeftRadius: "8px",
+                borderBottomLeftRadius: "8px",
+              }}
             />
           </div>
+
 
           <div className="grid grid-cols-2 gap-2">
             {/* Password */}

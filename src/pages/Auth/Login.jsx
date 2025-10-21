@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useStateContext } from "../../contexts/ContextProvider"
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Navigate, Link } from "react-router-dom";
 
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUser, setToken } = useStateContext();
@@ -107,15 +109,22 @@ const Login = () => {
               className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+
+          <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="Enter password"
               className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
           <button
             type="submit"

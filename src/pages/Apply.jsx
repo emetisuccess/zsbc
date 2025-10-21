@@ -488,7 +488,7 @@ export default function ChinaAdmissionForm() {
             if (data.email && !validators.email(data.email)) errs.push("Email format looks invalid!");
             if (data.phone && !validators.phone(data.phone)) errs.push("Phone number looks invalid!");
             if (expiryDate <= today) errs.push("Your Passport has expired!");
-            if (data.passportNumber.length > 9 || data.passportNumber.length < 9) errs.push("Invalid Passport Number!");
+            if (data.passportNumber.length < 7) errs.push("Invalid Passport Number!");
         }
 
         setEducationErrors(eduErrs);
@@ -509,8 +509,6 @@ export default function ChinaAdmissionForm() {
     // On submit
     const onSubmit = async (e) => {
         e.preventDefault();
-        // console.log(data.applicantSignature);
-        // return;
         for (let i = 0; i < STEPS.length - 1; i++) {
             if (!validateStep(i)) {
                 setStep(i);

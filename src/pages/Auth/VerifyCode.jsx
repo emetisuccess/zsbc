@@ -46,7 +46,6 @@ const VerifyCode = () => {
     // Submit OTP
     const handleSubmit = async () => {
         const enteredOtp = otp.join("");
-        console.log(enteredOtp);
         if (!enteredOtp && enteredOtp.length < 6) {
             toast.error("OTP field is Required!");
             return;
