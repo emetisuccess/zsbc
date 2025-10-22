@@ -337,7 +337,7 @@ export default function ChinaAdmissionForm() {
         return <Navigate to="/login" />
     }
 
-    const hasPhd = data.educationHistory.some(e => e.degreeAwarded === "PHD");
+    const hasPhd = data.educationHistory.some(e => e.degreeAwarded === "PhD");
     const updateEducation = (index, field, value) => {
         setData((prev) => {
             const next = Array.isArray(prev.educationHistory) ? [...prev.educationHistory] : [];
@@ -509,6 +509,7 @@ export default function ChinaAdmissionForm() {
 
     // On submit
     const onSubmit = async (e) => {
+
         e.preventDefault();
         for (let i = 0; i < STEPS.length - 1; i++) {
             if (!validateStep(i)) {
@@ -620,7 +621,7 @@ export default function ChinaAdmissionForm() {
             });
         }
 
-        setLoading(true);
+
         try {
             const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/apply`, {
                 method: "POST",
