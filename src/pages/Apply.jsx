@@ -336,6 +336,7 @@ export default function ChinaAdmissionForm() {
     if (!token) {
         return <Navigate to="/login" />
     }
+
     const hasPhd = data.educationHistory.some(e => e.degreeAwarded === "PHD");
     const updateEducation = (index, field, value) => {
         setData((prev) => {
@@ -644,11 +645,12 @@ export default function ChinaAdmissionForm() {
                 return;
             }
             const data = await res.json();
-            // console.log(data)
             toast.success(data.message, { "id": "res_success" });
             setData(initialData);
-            setStep(0);
-            return;
+            const timer = setTimeout(() => {
+                window.location.href = "/admission-success";
+            }, 2000);
+            return () => clearTimeout(timer);
         } catch (error) {
             toast.error(error.message, { "id": "res_error" });
             // console.log(error.message);
@@ -715,7 +717,7 @@ export default function ChinaAdmissionForm() {
 
                                         <SelectField required label="Rate Your English" name="rateYourEnglish" value={data.rateYourEnglish} onChange={update} options={["Good", "Average", "Better", "Very Good", "None"]} />
 
-                                        <SelectField required label="Study Category" name="studyCategory" value={data.studyCategory} onChange={update} options={["Undergraduate", "Master", "PHD"]} />
+                                        <SelectField required label="Study Category" name="studyCategory" value={data.studyCategory} onChange={update} options={["None Degree Program", "Undergraduate", "Master's", "PhD"]} />
 
                                         <TextField required label="Field of Study" name="fieldOfStudy" value={data.fieldOfStudy} onChange={update} placeholder="e.g. Medicine" />
                                     </section>
@@ -828,7 +830,7 @@ export default function ChinaAdmissionForm() {
                                                 {/*<TextField label="Degree Awarded" name={`degreeAwarded-${idx}`} type="text" value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} />*/}
 
 
-                                                <SelectField required label="Degree Awarded" name={`degreeAwarded-${idx}`} value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} options={["BSc.", "Master's", "PHD"]} />
+                                                <SelectField required label="Degree Awarded" name={`degreeAwarded-${idx}`} value={edu.degreeAwarded} onChange={(n, v) => updateEducation(idx, "degreeAwarded", v)} options={["Junior High School", "Senior High School", "GCE", "Diploma", "A'level", "Bachelor Degree", "Master Degree", "PhD"]} />
 
                                                 <div className="md:col-span-2 flex items-center gap-3">
                                                     {data.educationHistory.length > 1 && (
