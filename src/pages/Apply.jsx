@@ -502,9 +502,9 @@ export default function ChinaAdmissionForm() {
         if (!validateStep(step)) return; setStep((s) => Math.min(s + 1, STEPS.length - 1));
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
+
     const back = () => setStep((s) => Math.max(s - 1, 0));
     const reset = () => { setData(initialData); setStep(0); setErrors([]); setSubmitted(false); };
-
 
 
     // On submit
@@ -621,7 +621,7 @@ export default function ChinaAdmissionForm() {
             });
         }
 
-
+        setLoading(true);
         try {
             const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/apply`, {
                 method: "POST",
@@ -647,11 +647,11 @@ export default function ChinaAdmissionForm() {
             }
             const data = await res.json();
             toast.success(data.message, { "id": "res_success" });
-            setData(initialData);
-            const timer = setTimeout(() => {
-                window.location.href = "/admission-success";
-            }, 2000);
-            return () => clearTimeout(timer);
+            // setData(initialData);
+            // const timer = setTimeout(() => {
+            //     window.location.href = "/admission-success";
+            // }, 2000);
+            // return () => clearTimeout(timer);
         } catch (error) {
             toast.error(error.message, { "id": "res_error" });
             // console.log(error.message);
@@ -677,7 +677,9 @@ export default function ChinaAdmissionForm() {
                     <div className="bg-white rounded-2xl shadow-sm border p-6 md:p-8">
                         <StepIndicator currentStep={step} />
                         <ErrorBanner errors={errors} />
-                        <form onSubmit={onSubmit} className="space-y-6">
+                        <form onSubmit={onSubmit} onKeyDown={(e) => {
+                            if (e.key === "Enter") e.preventDefault();
+                        }} className="space-y-6">
 
                             {step === 0 && (
                                 <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1118,8 +1120,14 @@ export default function ChinaAdmissionForm() {
                                 <div className="flex gap-3">
                                     {step > 0 && (<button type="button" onClick={back} className="rounded-2xl border px-4 py-2 text-sm font-medium hover:bg-gray-50">Back</button>)}
                                     {step < STEPS.length - 1 ? (
-                                        <button type="button" onClick={next} className="rounded-2xl bg-[#0061a1] px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700">Continue</button>
+                                        <button type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault(); // ✅ ensure no accidental submit
+                                                next();
+                                            }}
+                                            className="rounded-2xl bg-[#0061a1] px-5 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700">Continue</button>
                                     ) : (
+
                                         <button type="submit" disabled={loading} className="rounded-2xl bg-green-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-green-700">{loading ? "Submitting...." : "Submit"}</button>
                                     )}
                                 </div>
