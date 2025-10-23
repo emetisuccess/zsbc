@@ -647,11 +647,11 @@ export default function ChinaAdmissionForm() {
             }
             const data = await res.json();
             toast.success(data.message, { "id": "res_success" });
-            // setData(initialData);
-            // const timer = setTimeout(() => {
-            //     window.location.href = "/admission-success";
-            // }, 2000);
-            // return () => clearTimeout(timer);
+            setData(initialData);
+            const timer = setTimeout(() => {
+                window.location.href = "/admission-success";
+            }, 2000);
+            return () => clearTimeout(timer);
         } catch (error) {
             toast.error(error.message, { "id": "res_error" });
             // console.log(error.message);
