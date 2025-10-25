@@ -256,12 +256,14 @@ function FileField({
     required
 }) {
     const previews = useMemo(() => (
-        Array.isArray(files) ? files.map((file) => ({
-            file,
-            url: file && file.type && file.type.startsWith("image/")
-                ? URL.createObjectURL(file)
-                : null
-        }))
+        Array.isArray(files)
+            ? files.map((file) => ({
+                file,
+                url:
+                    file && file.type && file.type.startsWith("image/")
+                        ? URL.createObjectURL(file)
+                        : null,
+            }))
             : []
     ), [files]);
 
@@ -274,27 +276,90 @@ function FileField({
         next.splice(idx, 1);
         onFilesChange(name, next, false);
     };
+
+    const handleFileSelect = (e) => {
+        const selectedFiles = Array.from(e.target.files || []);
+        const maxSize = 500 * 1024; // 500 KB
+
+        const oversized = selectedFiles.filter((f) => f.size > maxSize);
+        if (oversized.length > 0) {
+            const names = oversized.map((f) => f.name).join(", ");
+            toast
+                ? toast.error(`The following files exceed 500KB: ${names}`)
+                : alert(`The following files exceed 500KB: ${names}`);
+            // filter out invalid files
+        }
+
+        const validFiles = selectedFiles.filter((f) => f.size <= maxSize);
+
+        if (validFiles.length > 0) {
+            onFilesChange(name, validFiles, multiple);
+        }
+
+        // reset input value to allow reselecting same files
+        e.target.value = "";
+    };
+
     return (
         <div>
             <div className="flex items-center justify-between">
-                <span className="block text-sm font-medium text-gray-700 mb-1">{label}{required && <span className="text-red-500"> *</span>}</span>
+                <span className="block text-sm font-medium text-gray-700 mb-1">
+                    {label}
+                    {required && <span className="text-red-500"> *</span>}
+                </span>
                 <label className="text-xs text-blue-600 underline cursor-pointer">
-                    <input type="file" accept={accept} multiple={multiple} className="hidden" onChange={(e) => onFilesChange(name, Array.from(e.target.files || []), multiple)} />
+                    <input
+                        type="file"
+                        accept={accept}
+                        multiple={multiple}
+                        className="hidden"
+                        onChange={handleFileSelect}
+                    />
                     Add files
                 </label>
             </div>
+
             <div className="rounded-2xl border-2 border-dashed border-gray-300 p-4 text-center">
-                <p className="text-sm text-gray-600">Drag & drop files here or click <span className="font-medium">Add files</span>.</p>
-                <p className="text-xs text-gray-500 mt-1">Accepted: {accept || "any"}{multiple ? " • Multiple allowed" : ""}</p>
+                <p className="text-sm text-gray-600">
+                    Drag & drop files here or click{" "}
+                    <span className="font-medium">Add files</span>.
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                    Accepted: {accept || "any"}
+                    {multiple ? " • Multiple allowed" : ""} • Max: 500 KB each
+                </p>
             </div>
+
             {previews.length > 0 && (
                 <ul className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {previews.map((p, idx) => (
                         <li key={idx} className="relative group">
                             <div className="rounded-xl border p-2 flex flex-col items-center justify-center h-32 overflow-hidden">
-                                {p.url ? <img src={p.url} alt={p.file.name} className="object-cover w-full h-full rounded-lg" /> : <div className="text-center text-xs"><span className="block font-medium truncate">{p.file.name}</span><span className="text-gray-500">{(p.file.size / 1024).toFixed(0)} KB</span></div>}
+                                {p.url ? (
+                                    <img
+                                        src={p.url}
+                                        alt={p.file.name}
+                                        className="object-cover w-full h-full rounded-lg"
+                                    />
+                                ) : (
+                                    <div className="text-center text-xs">
+                                        <span className="block font-medium truncate">
+                                            {p.file.name}
+                                        </span>
+                                        <span className="text-gray-500">
+                                            {(p.file.size / 1024).toFixed(0)} KB
+                                        </span>
+                                    </div>
+                                )}
                             </div>
-                            <button type="button" onClick={() => removeAt(idx)} className="absolute -top-2 -right-2 bg-white border shadow rounded-full w-7 h-7 grid place-items-center opacity-0 group-hover:opacity-100 transition" aria-label="Remove file">×</button>
+                            <button
+                                type="button"
+                                onClick={() => removeAt(idx)}
+                                className="absolute -top-2 -right-2 bg-white border shadow rounded-full w-7 h-7 grid place-items-center opacity-0 group-hover:opacity-100 transition"
+                                aria-label="Remove file"
+                            >
+                                ×
+                            </button>
                         </li>
                     ))}
                 </ul>
