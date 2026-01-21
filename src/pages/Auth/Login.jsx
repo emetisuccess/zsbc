@@ -1,9 +1,8 @@
-import { useState } from 'react'
-import { useStateContext } from "../../contexts/ContextProvider"
+import { useState } from "react";
+import { useStateContext } from "../../contexts/ContextProvider";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Navigate, Link } from "react-router-dom";
-
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,58 +10,57 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { setUser, setToken } = useStateContext();
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
+  // const [googleLoading, setGoogleLoading] = useState(false);
   const { token } = useStateContext();
 
-
   if (token) {
-    return <Navigate to="/" />
+    return <Navigate to="/" />;
   }
 
-  const handleGoogleCallback = async (e) => {
-    e.preventDefault();
+  // const handleGoogleCallback = async (e) => {
+  //   e.preventDefault();
 
-    setGoogleLoading(true);
-    try {
-      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/auth-google`, {
-        method: "GET",
-        headers: {
-          "Accept": "application/json",
-        },
-        credentials: "include",
-      });
+  //   setGoogleLoading(true);
+  //   try {
+  //     const res = await fetch(
+  //       `${import.meta.env.VITE_BASE_URL}/user/auth-google`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           Accept: "application/json",
+  //         },
+  //         credentials: "include",
+  //       }
+  //     );
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        throw new Error(data?.message || `Request failed (${res.status})`);
-      }
-      const data = await res.json();
-      if (data) {
-        // console.log(data);
-        window.location.href = data.url; // redirect to Google login
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setGoogleLoading(false)
-    }
-  }
-
+  //     if (!res.ok) {
+  //       const data = await res.json().catch(() => null);
+  //       throw new Error(data?.message || `Request failed (${res.status})`);
+  //     }
+  //     const data = await res.json();
+  //     if (data) {
+  //       // console.log(data);
+  //       window.location.href = data.url; // redirect to Google login
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   } finally {
+  //     setGoogleLoading(false);
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
-      toast.error("All fields are Required")
+      toast.error("All fields are Required");
     } else {
-
       if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
         toast.error("Please enter a valid email address!");
         return;
       }
       setLoading(true);
       try {
-
         const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -75,7 +73,7 @@ const Login = () => {
         }
 
         const data = await res.json();
-        const token = data.token
+        const token = data.token;
         if (token) {
           setToken(token);
           setUser(data.user);
@@ -88,9 +86,8 @@ const Login = () => {
       } finally {
         setLoading(false);
       }
-
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -100,7 +97,9 @@ const Login = () => {
         {/* Email & Password Form */}
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -111,6 +110,9 @@ const Login = () => {
           </div>
 
           <div className="relative">
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type={showPassword ? "text" : "password"}
               value={password}
@@ -121,7 +123,7 @@ const Login = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+              className="absolute right-3 top-8 text-gray-500 hover:text-gray-700"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -130,23 +132,37 @@ const Login = () => {
             type="submit"
             disabled={loading}
             className="w-full bg-[#0061a1] text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition cursor-pointer"
-          >{loading ? "Logging in..." : "Login"}</button>
-          <div className="m-0 text-sm">Forgot Password?&nbsp;
-            <Link to='/forgot-password' className="underline text-[#0061a1] font-semibold">Reset</Link>
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+          <div className="m-0 text-sm">
+            Forgot Password?&nbsp;
+            <Link
+              to="/forgot-password"
+              className="underline text-[#0061a1] font-semibold"
+            >
+              Reset
+            </Link>
           </div>
-          <div className="m-0 text-sm">Don't have an Account?&nbsp;
-            <Link to='/register' className="underline text-[#0061a1] font-semibold">Register</Link>
+          <div className="m-0 text-sm">
+            Don't have an Account?&nbsp;
+            <Link
+              to="/register"
+              className="underline text-[#0061a1] font-semibold"
+            >
+              Register
+            </Link>
           </div>
         </form>
 
-        {/* Divider */}
+        {/* Divider 
         <div className="flex items-center my-6">
           <hr className="flex-grow border-gray-300" />
           <span className="px-2 text-gray-500 text-sm">OR</span>
           <hr className="flex-grow border-gray-300" />
         </div>
-
-        {/* Google Login Button */}
+*/}
+        {/* Google Login Button 
         <button
           className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition cursor-pointer" onClick={handleGoogleCallback}
         >
@@ -157,9 +173,10 @@ const Login = () => {
           />
           <span className="font-medium text-gray-700">{googleLoading ? "Processing google auth..." : "Continue with Google"}</span>
         </button>
+        */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import Breadcrum from "../layouts/Breadcrum"
-import Logo from "../assets/logos/zsbc_icon.png"
+import React, { useEffect, useState } from "react";
+import Breadcrum from "../layouts/Breadcrum";
+import Logo from "../assets/logos/zsbc_icon.png";
 import AboutImage from "../assets/images/about.jpg";
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,6 @@ const Majors = () => {
   const [majors, setMajors] = useState([]);
   const [pagination, setPagination] = useState({}); // store pagination info
   const [page, setPage] = useState(1); // current page
-
 
   useEffect(() => {
     let ignore = false;
@@ -25,10 +24,12 @@ const Majors = () => {
             last_page: data.last_page,
           });
         })
-        .catch(error => console.error(error))
+        .catch((error) => console.error(error))
         .finally(() => setLoading(false));
     }
-    return () => { ignore = true }; // cleanup
+    return () => {
+      ignore = true;
+    }; // cleanup
   }, [page]); // run whenever page changes
 
   if (loading) {
@@ -41,10 +42,18 @@ const Majors = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
   return (
     <div>
-      <Breadcrum heading={`Majors`} page_title={`Majors`} imagePath={AboutImage} />
+      <Breadcrum
+        heading={`Majors`}
+        page_title={`Majors`}
+        imagePath={AboutImage}
+      />
       <section className="py-16 px-6 md:px-1">
         <div className="max-w-6xl mx-auto grid md:grid-cols-1 gap-10 items-center">
-          <p className="py-2 my-3 border-l-8 border-[#0061a1] text-center border-r-8 bg-gray-100  text-2xl">If your preferred Major is not here, kindly click on this link <Link to='/apply' className="ml-4 underline">Apply Here</Link>
+          <p className="py-2 my-3 border-l-8 border-[#0061a1] text-center border-r-8 bg-gray-100  text-2xl">
+            If your preferred Major is not here, kindly click on this link{" "}
+            <Link to="/apply" className="ml-4 underline">
+              Apply Here
+            </Link>
           </p>
           {/* Title */}
           <div className="text-center">
@@ -59,7 +68,10 @@ const Majors = () => {
           {/* Cards */}
           <div className="grid sm:grid-cols-3 gap-6">
             {majors.map((major) => (
-              <div key={major.id} className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]">
+              <div
+                key={major.id}
+                className="relative rounded-2xl overflow-hidden shadow-lg h-[350px]"
+              >
                 <img
                   src={major.image}
                   alt={major.name}
@@ -71,7 +83,7 @@ const Majors = () => {
                   </h3>
                   <p className="text-sm text-gray-200">{major.description}</p>
                   <button className="px-6 py-2 bg-[#0061a1] text-white rounded-lg hover:bg-blue-800 transition duration-300 ease-in-out hover:scale-110 mt-2">
-                    <a href='/apply'>Apply</a>
+                    <a href="/apply">Apply</a>
                   </button>
                 </div>
               </div>
@@ -101,7 +113,7 @@ const Majors = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default Majors
+export default Majors;
